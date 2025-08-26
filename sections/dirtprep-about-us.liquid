@@ -1,0 +1,1756 @@
+{% liquid
+  assign fetch_priority = 'auto'
+  if section.index == 1
+    assign fetch_priority = 'high'
+  endif
+
+  assign sizes = '100vw'
+  assign widths = '375, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+%}
+
+<section 
+  id="DirtPrepAbout-{{ section.id }}" 
+  class="dirtprep-about color-{{ section.settings.color_scheme }}"
+  data-scroll-spy
+>
+  <div class="dirtprep-about__container page-width">
+    <!-- Main Content Grid -->
+    <div class="dirtprep-about__grid">
+      
+      <!-- D-Mask Hero Image -->
+      <div class="dirtprep-about__hero">
+        {% if section.settings.main_image != blank %}
+          <div class="dirtprep-about__d-mask">
+            {{
+              section.settings.main_image
+              | image_url: width: 2000
+              | image_tag:
+                loading: 'lazy',
+                fetchpriority: fetch_priority,
+                width: section.settings.main_image.width,
+                height: section.settings.main_image.height,
+                class: 'dirtprep-about__hero-image',
+                sizes: sizes,
+                widths: widths,
+                alt: section.settings.main_image.alt
+            }}
+            
+            <!-- Interactive Hotspots -->
+            {% if section.settings.show_hotspots %}
+              <div class="dirtprep-about__hotspot" data-hotspot="tablet" style="top: 35%; left: 45%;">
+                <div class="dirtprep-about__hotspot-pulse"></div>
+                <div class="dirtprep-about__tooltip">Machine control setup—done in a day</div>
+              </div>
+              <div class="dirtprep-about__hotspot" data-hotspot="antenna" style="top: 15%; left: 65%;">
+                <div class="dirtprep-about__hotspot-pulse"></div>
+                <div class="dirtprep-about__tooltip">GNSS precision positioning</div>
+              </div>
+              <div class="dirtprep-about__hotspot" data-hotspot="blade" style="top: 60%; left: 25%;">
+                <div class="dirtprep-about__hotspot-pulse"></div>
+                <div class="dirtprep-about__tooltip">Automated blade control</div>
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+        
+        <!-- Hazard Stripe Divider -->
+        <div class="dirtprep-about__divider"></div>
+      </div>
+
+      <!-- Content Area -->
+      <div class="dirtprep-about__content">
+        <!-- Blueprint Background -->
+        <div class="dirtprep-about__blueprint">
+          <svg class="dirtprep-about__blueprint-lines" viewBox="0 0 600 400" aria-hidden="true">
+            <defs>
+              <pattern id="blueprint-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(227, 30, 36, 0.1)" stroke-width="0.5"/>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#blueprint-grid)" />
+            <!-- Contour Lines -->
+            <path class="blueprint-line" d="M50,100 Q150,120 250,100 T450,110" fill="none" stroke="rgba(227, 30, 36, 0.2)" stroke-width="1"/>
+            <path class="blueprint-line" d="M50,150 Q150,170 250,150 T450,160" fill="none" stroke="rgba(227, 30, 36, 0.2)" stroke-width="1"/>
+            <path class="blueprint-line" d="M50,200 Q150,220 250,200 T450,210" fill="none" stroke="rgba(227, 30, 36, 0.2)" stroke-width="1"/>
+            <!-- Coordinate Ticks -->
+            <g class="blueprint-ticks">
+              <text x="60" y="95" font-size="8" fill="rgba(227, 30, 36, 0.3)">100.0</text>
+              <text x="60" y="145" font-size="8" fill="rgba(227, 30, 36, 0.3)">95.0</text>
+              <text x="60" y="195" font-size="8" fill="rgba(227, 30, 36, 0.3)">90.0</text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Header with Crane Animation -->
+        <div class="dirtprep-about__header">
+          {% if section.settings.heading != blank %}
+            <h2 class="dirtprep-about__heading">
+              <span class="crane-lifted">{{ section.settings.heading }}</span>
+            </h2>
+          {% endif %}
+          
+          {% if section.settings.subheading != blank %}
+            <p class="dirtprep-about__subheading">{{ section.settings.subheading }}</p>
+          {% endif %}
+        </div>
+
+        <!-- Main Description -->
+        {% if section.settings.description != blank %}
+          <div class="dirtprep-about__description">
+            {{ section.settings.description }}
+          </div>
+        {% endif %}
+
+        <!-- Role Toggle -->
+        {% if section.settings.show_role_toggle %}
+          <div class="dirtprep-about__role-toggle">
+            <div class="role-chips">
+              <button class="role-chip active" data-role="contractors">Contractors</button>
+              <button class="role-chip" data-role="owners">Owners</button>
+              <button class="role-chip" data-role="municipalities">Municipalities</button>
+            </div>
+            
+            <div class="role-content">
+              <div class="role-benefits active" data-role-content="contractors">
+                <div class="benefit-item">
+                  <div class="benefit-icon">📱</div>
+                  <span>Simplified tech adoption with full training</span>
+                </div>
+                <div class="benefit-item">
+                  <div class="benefit-icon">🚀</div>
+                  <span>Faster project completion times</span>
+                </div>
+                <div class="benefit-item">
+                  <div class="benefit-icon">🎯</div>
+                  <span>Reduced material waste and rework</span>
+                </div>
+              </div>
+              
+              <div class="role-benefits" data-role-content="owners">
+                <div class="benefit-item">
+                  <div class="benefit-icon">💰</div>
+                  <span>Lower project costs through precision</span>
+                </div>
+                <div class="benefit-item">
+                  <div class="benefit-icon">📊</div>
+                  <span>Real-time progress monitoring</span>
+                </div>
+                <div class="benefit-item">
+                  <div class="benefit-icon">✅</div>
+                  <span>Guaranteed spec compliance</span>
+                </div>
+              </div>
+              
+              <div class="role-benefits" data-role-content="municipalities">
+                <div class="benefit-item">
+                  <div class="benefit-icon">🏛️</div>
+                  <span>Enhanced public project oversight</span>
+                </div>
+                <div class="benefit-item">
+                  <div class="benefit-icon">📋</div>
+                  <span>Automated compliance reporting</span>
+                </div>
+                <div class="benefit-item">
+                  <div class="benefit-icon">🌱</div>
+                  <span>Sustainable construction practices</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+
+        <!-- Why/What/How Micro-Grid -->
+        {% if section.settings.show_micro_grid %}
+          <div class="dirtprep-about__micro-grid">
+            <div class="micro-card">
+              <h4>Why it matters</h4>
+              <p>{{ section.settings.why_text | default: "Technology adoption shouldn't slow down your project timeline." }}</p>
+              <a href="{{ section.settings.why_link }}" class="micro-link">Learn more →</a>
+            </div>
+            <div class="micro-card">
+              <h4>What we do</h4>
+              <p>{{ section.settings.what_text | default: "Complete setup, training, and ongoing support for construction tech." }}</p>
+              <a href="{{ section.settings.what_link }}" class="micro-link">Our services →</a>
+            </div>
+            <div class="micro-card">
+              <h4>How we support</h4>
+              <p>{{ section.settings.how_text | default: "On-site training, 24/7 support, and equipment maintenance." }}</p>
+              <a href="{{ section.settings.how_link }}" class="micro-link">Support options →</a>
+            </div>
+          </div>
+        {% endif %}
+
+        <!-- CTA Buttons -->
+        <div class="dirtprep-about__buttons">
+          {% if section.settings.primary_button_text != blank %}
+            <a 
+              href="{{ section.settings.primary_button_link | default: '#' }}" 
+              class="dirtprep-about__button dirtprep-about__button--primary"
+            >
+              {{ section.settings.primary_button_text }}
+            </a>
+          {% endif %}
+
+          {% if section.settings.secondary_button_text != blank %}
+            <a 
+              href="{{ section.settings.secondary_button_link | default: '#' }}" 
+              class="dirtprep-about__button dirtprep-about__button--secondary"
+            >
+              {{ section.settings.secondary_button_text }}
+            </a>
+          {% endif %}
+
+          {% if section.settings.tertiary_button_text != blank %}
+            <a 
+              href="{{ section.settings.tertiary_button_link | default: '#team' }}" 
+              class="dirtprep-about__button dirtprep-about__button--tertiary"
+            >
+              {{ section.settings.tertiary_button_text }}
+            </a>
+          {% endif %}
+        </div>
+
+        <!-- Social Proof Line -->
+        {% if section.settings.show_social_proof %}
+          <div class="dirtprep-about__social-proof">
+            {{ section.settings.social_proof_text | default: "Trusted by 120+ SoCal crews • Avg. 4.9/5 service rating" }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Credibility Modules -->
+    <div class="dirtprep-about__credibility">
+      
+      <!-- KPI Snapshot Pills -->
+      {% if section.settings.show_kpi_snapshots %}
+        <div class="kpi-snapshots">
+          <div class="kpi-pill" data-animate-counter>
+            <div class="kpi-icon">🏗️</div>
+            <div class="kpi-value" data-target="{{ section.settings.kpi_projects }}">0</div>
+            <div class="kpi-label">Projects Equipped</div>
+          </div>
+          <div class="kpi-pill" data-animate-counter>
+            <div class="kpi-icon">⚡</div>
+            <div class="kpi-value" data-target="{{ section.settings.kpi_rampup }}">0</div>
+            <div class="kpi-label">Day Avg. Crew Ramp-Up</div>
+          </div>
+          <div class="kpi-pill" data-animate-counter>
+            <div class="kpi-icon">⭐</div>
+            <div class="kpi-value" data-target="{{ section.settings.kpi_satisfaction }}">0</div>
+            <div class="kpi-label">Support CSAT</div>
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- Partner Badges Row -->
+      {% if section.settings.show_partner_badges %}
+        <div class="partner-badges">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'partner_logo' %}
+                {% if block.settings.logo != blank %}
+                  <div class="partner-badge">
+                    {{
+                      block.settings.logo
+                      | image_url: width: 150
+                      | image_tag:
+                        loading: 'lazy',
+                        alt: block.settings.alt_text | default: 'Partner Logo',
+                        class: 'partner-logo'
+                    }}
+                  </div>
+                {% endif %}
+            {% endcase %}
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <!-- Testimonial Marquee -->
+      {% if section.settings.show_testimonial_marquee %}
+        <div class="testimonial-marquee">
+          <div class="marquee-content" data-auto-rotate>
+            {% for block in section.blocks %}
+              {% case block.type %}
+                {% when 'testimonial' %}
+                  <div class="testimonial-item">
+                    <p class="testimonial-text">"{{ block.settings.quote }}"</p>
+                    <cite class="testimonial-author">{{ block.settings.author }}, {{ block.settings.company }}</cite>
+                  </div>
+              {% endcase %}
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- Service Area Mini-Map -->
+      {% if section.settings.show_service_map %}
+        <div class="service-map-chip" data-expandable>
+          <div class="map-preview">
+            <div class="map-icon">🗺️</div>
+            <span>CA & NV Service Area</span>
+            <div class="expand-arrow">↗</div>
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- Compliance/Safety Chip -->
+      {% if section.settings.show_compliance_chip %}
+        <div class="compliance-chip">
+          <div class="compliance-icon">🛡️</div>
+          <div class="compliance-text">
+            <strong>Licensed & Insured</strong>
+            <span>{{ section.settings.compliance_text | default: "Full certifications, safety training programs" }}</span>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+  </div>
+
+  <!-- Optional Video Cameo -->
+  {% if section.settings.show_video_cameo and section.settings.video_url != blank %}
+    <div class="dirtprep-about__video-cameo">
+      <video 
+        autoplay 
+        muted 
+        loop 
+        playsinline
+        class="video-cameo"
+        data-intersection-video
+      >
+        <source src="{{ section.settings.video_url }}" type="video/mp4">
+      </video>
+    </div>
+  {% endif %}
+
+  <!-- Micro-Timeline -->
+  {% if section.settings.show_timeline %}
+    <div class="dirtprep-about__timeline">
+      <div class="timeline-line">
+        <div class="timeline-step" data-step="assess">
+          <div class="step-dot"></div>
+          <div class="step-label">Assess</div>
+          <div class="step-tooltip">Site evaluation and tech requirements analysis</div>
+        </div>
+        <div class="timeline-step" data-step="equip">
+          <div class="step-dot"></div>
+          <div class="step-label">Equip</div>
+          <div class="step-tooltip">Hardware installation and software setup</div>
+        </div>
+        <div class="timeline-step" data-step="train">
+          <div class="step-dot"></div>
+          <div class="step-label">Train</div>
+          <div class="step-tooltip">Comprehensive crew training and certification</div>
+        </div>
+        <div class="timeline-step" data-step="support">
+          <div class="step-dot"></div>
+          <div class="step-label">Support</div>
+          <div class="step-tooltip">Ongoing support and maintenance</div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+</section>
+
+<!-- Sticky Mobile CTA -->
+{% if section.settings.show_mobile_sticky %}
+  <div class="dirtprep-about__mobile-sticky" data-mobile-sticky>
+    <button class="mobile-sticky-btn" data-dismiss>×</button>
+    <a href="{{ section.settings.primary_button_link | default: '#' }}" class="mobile-sticky-cta">
+      {{ section.settings.primary_button_text | default: "Request a Demo" }}
+    </a>
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  :root {
+    --dirtprep-red: #e31e24;
+    --dirtprep-red-dark: #c41e3a;
+    --dirtprep-red-light: #ff4757;
+    --dirtprep-white: #ffffff;
+    --dirtprep-gray-light: #f8f9fa;
+    --dirtprep-gray: #6c757d;
+    --dirtprep-gray-dark: #495057;
+    --dirtprep-dark: #2c3e50;
+    --dirtprep-black: #1a1a1a;
+  }
+
+  .dirtprep-about {
+    position: relative;
+    padding: 4rem 0;
+    background: linear-gradient(135deg, #fafafa 0%, #f0f2f5 100%);
+    overflow: hidden;
+  }
+
+  .dirtprep-about__container {
+    position: relative;
+    z-index: 2;
+  }
+
+  .dirtprep-about__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    margin-bottom: 3rem;
+  }
+
+  /* D-Mask Hero Styles */
+  .dirtprep-about__hero {
+    position: relative;
+  }
+
+  .dirtprep-about__d-mask {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'%3E%3Cpath d='M50 50 L50 200 Q50 250 75 275 Q100 300 150 325 Q200 350 250 325 Q300 300 325 275 Q350 250 350 200 L350 50 L300 50 L300 180 Q300 220 280 240 Q260 260 220 280 Q180 300 150 280 Q120 260 100 240 Q80 220 80 180 L80 50 Z' fill='white'/%3E%3C/svg%3E");
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+
+  .dirtprep-about__d-mask:hover {
+    transform: scale(1.02);
+  }
+
+  .dirtprep-about__hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.6s ease;
+  }
+
+  .dirtprep-about__d-mask:hover .dirtprep-about__hero-image {
+    transform: scale(1.05);
+  }
+
+  /* Interactive Hotspots */
+  .dirtprep-about__hotspot {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    z-index: 3;
+  }
+
+  .dirtprep-about__hotspot-pulse {
+    width: 100%;
+    height: 100%;
+    background: var(--dirtprep-red);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 0 0 rgba(227, 30, 36, 0.4);
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(227, 30, 36, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(227, 30, 36, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(227, 30, 36, 0);
+    }
+  }
+
+  .dirtprep-about__tooltip {
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--dirtprep-dark);
+    color: var(--dirtprep-white);
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .dirtprep-about__tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--dirtprep-dark);
+  }
+
+  .dirtprep-about__hotspot:hover .dirtprep-about__tooltip {
+    opacity: 1;
+  }
+
+  /* Hazard Stripe Divider */
+  .dirtprep-about__divider {
+    width: 100%;
+    height: 4px;
+    background: repeating-linear-gradient(
+      45deg,
+      var(--dirtprep-red),
+      var(--dirtprep-red) 10px,
+      #ffcc00 10px,
+      #ffcc00 20px
+    );
+    margin-top: 2rem;
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(227, 30, 36, 0.3);
+  }
+
+  /* Content Area */
+  .dirtprep-about__content {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Blueprint Background */
+  .dirtprep-about__blueprint {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.5;
+  }
+
+  .dirtprep-about__blueprint-lines {
+    width: 100%;
+    height: 100%;
+  }
+
+  .blueprint-line {
+    stroke-dasharray: 5,5;
+    animation: drawLine 3s ease-in-out infinite alternate;
+  }
+
+  @keyframes drawLine {
+    0% {
+      stroke-dashoffset: 0;
+      opacity: 0.2;
+    }
+    100% {
+      stroke-dashoffset: -10;
+      opacity: 0.4;
+    }
+  }
+
+  .blueprint-ticks {
+    animation: fadeInOut 4s ease-in-out infinite;
+  }
+
+  @keyframes fadeInOut {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.6; }
+  }
+
+  /* Header with Crane Animation */
+  .dirtprep-about__header {
+    margin-bottom: 2rem;
+  }
+
+  .dirtprep-about__heading {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin: 0 0 1rem 0;
+    color: var(--dirtprep-dark);
+    position: relative;
+  }
+
+  .crane-lifted {
+    display: inline-block;
+    animation: craneHook 1s ease-out 0.5s both;
+  }
+
+  @keyframes craneHook {
+    0% {
+      transform: translateY(10px);
+      opacity: 0.8;
+    }
+    70% {
+      transform: translateY(-5px);
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .dirtprep-about__subheading {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--dirtprep-gray-dark);
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  .dirtprep-about__description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--dirtprep-dark);
+    margin-bottom: 2.5rem;
+    max-width: 65ch;
+  }
+
+  /* Role Toggle */
+  .dirtprep-about__role-toggle {
+    margin-bottom: 2.5rem;
+  }
+
+  .role-chips {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .role-chip {
+    padding: 0.75rem 1.5rem;
+    border: 2px solid var(--dirtprep-gray-light);
+    background: var(--dirtprep-white);
+    color: var(--dirtprep-gray-dark);
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+  }
+
+  .role-chip:hover {
+    border-color: var(--dirtprep-red);
+    color: var(--dirtprep-red);
+  }
+
+  .role-chip.active {
+    background: var(--dirtprep-red);
+    border-color: var(--dirtprep-red);
+    color: var(--dirtprep-white);
+  }
+
+  .role-content {
+    position: relative;
+    min-height: 120px;
+  }
+
+  .role-benefits {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+  }
+
+  .role-benefits.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background: var(--dirtprep-white);
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+  }
+
+  .benefit-item:hover {
+    transform: translateX(5px);
+  }
+
+  .benefit-icon {
+    font-size: 1.5rem;
+    width: 40px;
+    text-align: center;
+  }
+
+  /* Micro-Grid */
+  .dirtprep-about__micro-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .micro-card {
+    background: var(--dirtprep-white);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .micro-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  }
+
+  .micro-card h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--dirtprep-dark);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .micro-card p {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: var(--dirtprep-gray-dark);
+    margin: 0 0 1rem 0;
+  }
+
+  .micro-link {
+    color: var(--dirtprep-red);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: color 0.3s ease;
+  }
+
+  .micro-link:hover {
+    color: var(--dirtprep-red-dark);
+  }
+
+  /* Buttons */
+  .dirtprep-about__buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  .dirtprep-about__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid transparent;
+  }
+
+  .dirtprep-about__button--primary {
+    background: var(--dirtprep-red);
+    color: var(--dirtprep-white);
+    border-color: var(--dirtprep-red);
+    box-shadow: 0 4px 15px rgba(227, 30, 36, 0.25);
+  }
+
+  .dirtprep-about__button--primary:hover {
+    background: var(--dirtprep-red-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(227, 30, 36, 0.35);
+  }
+
+  .dirtprep-about__button--secondary {
+    background: transparent;
+    color: var(--dirtprep-red);
+    border-color: var(--dirtprep-red);
+  }
+
+  .dirtprep-about__button--secondary:hover {
+    background: var(--dirtprep-red);
+    color: var(--dirtprep-white);
+  }
+
+  .dirtprep-about__button--tertiary {
+    background: transparent;
+    color: var(--dirtprep-gray-dark);
+    border-color: var(--dirtprep-gray);
+    font-size: 0.9rem;
+  }
+
+  .dirtprep-about__button--tertiary:hover {
+    background: var(--dirtprep-gray-light);
+    border-color: var(--dirtprep-gray-dark);
+  }
+
+  /* Social Proof */
+  .dirtprep-about__social-proof {
+    font-size: 0.9rem;
+    color: var(--dirtprep-gray);
+    font-weight: 500;
+    text-align: center;
+    padding: 0.5rem 0;
+  }
+
+  /* Credibility Modules */
+  .dirtprep-about__credibility {
+    margin-top: 4rem;
+    padding-top: 3rem;
+    border-top: 1px solid rgba(227, 30, 36, 0.1);
+  }
+
+  /* KPI Snapshots */
+  .kpi-snapshots {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .kpi-pill {
+    background: var(--dirtprep-white);
+    padding: 1.5rem;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+    min-width: 140px;
+  }
+
+  .kpi-pill:hover {
+    transform: translateY(-5px);
+  }
+
+  .kpi-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .kpi-value {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--dirtprep-red);
+    margin-bottom: 0.25rem;
+  }
+
+  .kpi-label {
+    font-size: 0.8rem;
+    color: var(--dirtprep-gray);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Partner Badges */
+  .partner-badges {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .partner-badge {
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+    filter: grayscale(100%);
+  }
+
+  .partner-badge:hover {
+    opacity: 1;
+    filter: grayscale(0%);
+  }
+
+  .partner-logo {
+    height: 40px;
+    width: auto;
+    max-width: 120px;
+  }
+
+  /* Testimonial Marquee */
+  .testimonial-marquee {
+    background: var(--dirtprep-white);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+  }
+
+  .marquee-content {
+    position: relative;
+    height: 60px;
+  }
+
+  .testimonial-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    text-align: center;
+  }
+
+  .testimonial-item.active {
+    opacity: 1;
+  }
+
+  .testimonial-text {
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--dirtprep-dark);
+    margin: 0 0 0.5rem 0;
+    line-height: 1.4;
+  }
+
+  .testimonial-author {
+    font-size: 0.85rem;
+    color: var(--dirtprep-gray);
+    font-weight: 600;
+  }
+
+  /* Service Map & Compliance */
+  .service-map-chip,
+  .compliance-chip {
+    background: var(--dirtprep-white);
+    padding: 1rem 1.5rem;
+    border-radius: 25px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0.5rem;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  }
+
+  .service-map-chip:hover,
+  .compliance-chip:hover {
+    transform: scale(1.05);
+  }
+
+  .map-icon,
+  .compliance-icon {
+    font-size: 1.2rem;
+  }
+
+  .compliance-text strong {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--dirtprep-dark);
+    margin-bottom: 0.25rem;
+  }
+
+  .compliance-text span {
+    font-size: 0.8rem;
+    color: var(--dirtprep-gray);
+  }
+
+  /* Video Cameo */
+  .dirtprep-about__video-cameo {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    width: 200px;
+    height: 120px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    z-index: 5;
+  }
+
+  .video-cameo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Timeline */
+  .dirtprep-about__timeline {
+    margin-top: 3rem;
+    padding: 2rem 0;
+  }
+
+  .timeline-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .timeline-line::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--dirtprep-red), var(--dirtprep-red-light));
+    z-index: 1;
+  }
+
+  .timeline-step {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .step-dot {
+    width: 16px;
+    height: 16px;
+    background: var(--dirtprep-red);
+    border: 3px solid var(--dirtprep-white);
+    border-radius: 50%;
+    margin: 0 auto 0.5rem;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 8px rgba(227, 30, 36, 0.3);
+  }
+
+  .timeline-step:hover .step-dot {
+    transform: scale(1.3);
+  }
+
+  .step-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--dirtprep-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .step-tooltip {
+    position: absolute;
+    bottom: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--dirtprep-dark);
+    color: var(--dirtprep-white);
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    max-width: 200px;
+    white-space: normal;
+    text-align: center;
+    z-index: 10;
+  }
+
+  .timeline-step:hover .step-tooltip {
+    opacity: 1;
+  }
+
+  /* Mobile Sticky CTA */
+  .dirtprep-about__mobile-sticky {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--dirtprep-red);
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    box-shadow: 0 4px 20px rgba(227, 30, 36, 0.4);
+    display: none;
+    align-items: center;
+    gap: 1rem;
+    z-index: 1000;
+    animation: slideUp 0.3s ease;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateX(-50%) translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .mobile-sticky-btn {
+    background: none;
+    border: none;
+    color: var(--dirtprep-white);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+  }
+
+  .mobile-sticky-cta {
+    color: var(--dirtprep-white);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  /* Responsive Design */
+  @media screen and (max-width: 1199px) {
+    .dirtprep-about__grid {
+      gap: 3rem;
+    }
+    
+    .dirtprep-about__d-mask {
+      height: 400px;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .dirtprep-about {
+      padding: 3rem 0;
+    }
+
+    .dirtprep-about__grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .dirtprep-about__d-mask {
+      height: 350px;
+    }
+
+    .dirtprep-about__heading {
+      font-size: clamp(2rem, 6vw, 3rem);
+    }
+
+    .role-chips {
+      justify-content: center;
+    }
+
+    .dirtprep-about__micro-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .dirtprep-about__buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .dirtprep-about__button {
+      width: 100%;
+      max-width: 280px;
+    }
+
+    .kpi-snapshots {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .partner-badges {
+      gap: 1rem;
+    }
+
+    .partner-logo {
+      height: 30px;
+    }
+
+    .timeline-line {
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .timeline-line::before {
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      right: auto;
+      width: 2px;
+      height: auto;
+      background: linear-gradient(180deg, var(--dirtprep-red), var(--dirtprep-red-light));
+    }
+
+    .step-tooltip {
+      position: relative;
+      bottom: auto;
+      left: auto;
+      transform: none;
+      opacity: 1;
+      pointer-events: auto;
+      background: var(--dirtprep-gray-light);
+      color: var(--dirtprep-dark);
+      margin-top: 0.5rem;
+    }
+
+    .dirtprep-about__mobile-sticky {
+      display: flex;
+    }
+
+    .dirtprep-about__video-cameo {
+      position: relative;
+      top: auto;
+      right: auto;
+      width: 100%;
+      height: 200px;
+      margin-top: 2rem;
+    }
+  }
+
+  /* Accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .blueprint-line,
+    .blueprint-ticks,
+    .crane-lifted,
+    .kpi-pill,
+    .micro-card,
+    .benefit-item,
+    .partner-badge,
+    .timeline-step,
+    .dirtprep-about__d-mask,
+    .dirtprep-about__hero-image {
+      animation: none;
+      transition: none;
+    }
+
+    .kpi-pill:hover,
+    .micro-card:hover,
+    .benefit-item:hover,
+    .timeline-step:hover .step-dot,
+    .dirtprep-about__d-mask:hover,
+    .dirtprep-about__button:hover {
+      transform: none;
+    }
+  }
+
+  @media (prefers-contrast: high) {
+    .dirtprep-about__button {
+      border-width: 3px;
+    }
+    
+    .role-chip {
+      border-width: 3px;
+    }
+    
+    .kpi-pill,
+    .micro-card,
+    .testimonial-marquee {
+      border: 2px solid var(--dirtprep-gray);
+    }
+  }
+
+  /* Performance optimizations */
+  .dirtprep-about__hero-image,
+  .video-cameo {
+    will-change: transform;
+  }
+
+  .role-benefits,
+  .testimonial-item {
+    will-change: opacity, transform;
+  }
+{% endstylesheet %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Role Toggle Functionality
+  const roleChips = document.querySelectorAll('.role-chip');
+  const roleBenefits = document.querySelectorAll('.role-benefits');
+  
+  roleChips.forEach(chip => {
+    chip.addEventListener('click', function() {
+      const targetRole = this.dataset.role;
+      
+      // Update active chip
+      roleChips.forEach(c => c.classList.remove('active'));
+      this.classList.add('active');
+      
+      // Update active content
+      roleBenefits.forEach(benefit => {
+        benefit.classList.remove('active');
+        if (benefit.dataset.roleContent === targetRole) {
+          benefit.classList.add('active');
+        }
+      });
+    });
+  });
+
+  // Animated Counter for KPIs
+  const observerOptions = {
+    threshold: 0.5,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const counter = entry.target.querySelector('.kpi-value');
+        const target = parseInt(counter.dataset.target);
+        animateCounter(counter, target);
+        counterObserver.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('[data-animate-counter]').forEach(el => {
+    counterObserver.observe(el);
+  });
+
+  function animateCounter(element, target) {
+    let current = 0;
+    const increment = target / 50;
+    const timer = setInterval(() => {
+      current += increment;
+      element.textContent = Math.floor(current);
+      
+      if (current >= target) {
+        element.textContent = target;
+        clearInterval(timer);
+      }
+    }, 40);
+  }
+
+  // Testimonial Marquee Auto-rotation
+  const testimonialItems = document.querySelectorAll('.testimonial-item');
+  if (testimonialItems.length > 1) {
+    let currentIndex = 0;
+    testimonialItems[0].classList.add('active');
+    
+    setInterval(() => {
+      testimonialItems[currentIndex].classList.remove('active');
+      currentIndex = (currentIndex + 1) % testimonialItems.length;
+      testimonialItems[currentIndex].classList.add('active');
+    }, 4000);
+  }
+
+  // Blueprint Animation on Scroll
+  const blueprintObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const lines = entry.target.querySelectorAll('.blueprint-line');
+        lines.forEach((line, index) => {
+          line.style.animationDelay = `${index * 0.2}s`;
+          line.style.animationPlayState = 'running';
+        });
+      }
+    });
+  }, observerOptions);
+
+  const blueprintElement = document.querySelector('.dirtprep-about__blueprint');
+  if (blueprintElement) {
+    blueprintObserver.observe(blueprintElement);
+  }
+
+  // Mobile Sticky CTA
+  const mobileSticky = document.querySelector('[data-mobile-sticky]');
+  const dismissBtn = document.querySelector('[data-dismiss]');
+  
+  if (mobileSticky && window.innerWidth <= 768) {
+    const aboutSection = document.querySelector('.dirtprep-about');
+    
+    const stickyObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          mobileSticky.style.display = 'flex';
+        } else {
+          mobileSticky.style.display = 'none';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    stickyObserver.observe(aboutSection);
+
+    dismissBtn?.addEventListener('click', () => {
+      mobileSticky.style.display = 'none';
+    });
+  }
+
+  // Video Intersection Observer
+  const videoElements = document.querySelectorAll('[data-intersection-video]');
+  
+  const videoObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.play();
+      } else {
+        entry.target.pause();
+      }
+    });
+  }, { threshold: 0.3 });
+
+  videoElements.forEach(video => {
+    videoObserver.observe(video);
+  });
+
+  // Service Map Expandable
+  const serviceMapChip = document.querySelector('[data-expandable]');
+  serviceMapChip?.addEventListener('click', function() {
+    // This would trigger the full service area section
+    const serviceSection = document.querySelector('#service-area');
+    if (serviceSection) {
+      serviceSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "DirtPrep About Us",
+  "tag": "section",
+  "class": "dirtprep-about-wrapper section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Main Content"
+    },
+    {
+      "type": "image_picker",
+      "id": "main_image",
+      "label": "Hero Image",
+      "info": "Main image for the D-mask hero (recommended: 1200x800px, construction scene with workers)"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Main Heading",
+      "default": "We help crews adopt construction tech—fast"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading", 
+      "default": "Training, setup, and support for heavy civil & earthmoving"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>DirtPrep Solutions is a one-stop-shop for construction technology, focusing on the heavy civil and earthmoving industries. We specialize in all aspects of technology applicable to earthmoving and helping customers that have limited experience with technology be successful with their investment. We have the ability to provide best-in-class services, training, and support.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Interactive Features"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_hotspots",
+      "label": "Show Interactive Hotspots",
+      "default": true,
+      "info": "Display clickable hotspots on the hero image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_role_toggle",
+      "label": "Show Role Toggle",
+      "default": true,
+      "info": "Display audience-specific benefits (Contractors, Owners, Municipalities)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_micro_grid",
+      "label": "Show Why/What/How Grid",
+      "default": true,
+      "info": "Display the micro-grid with three key points"
+    },
+    {
+      "type": "header",
+      "content": "Micro-Grid Content"
+    },
+    {
+      "type": "text",
+      "id": "why_text",
+      "label": "Why It Matters Text",
+      "default": "Technology adoption shouldn't slow down your project timeline."
+    },
+    {
+      "type": "url",
+      "id": "why_link",
+      "label": "Why It Matters Link"
+    },
+    {
+      "type": "text",
+      "id": "what_text",
+      "label": "What We Do Text",
+      "default": "Complete setup, training, and ongoing support for construction tech."
+    },
+    {
+      "type": "url",
+      "id": "what_link",
+      "label": "What We Do Link"
+    },
+    {
+      "type": "text",
+      "id": "how_text",
+      "label": "How We Support Text",
+      "default": "On-site training, 24/7 support, and equipment maintenance."
+    },
+    {
+      "type": "url",
+      "id": "how_link",
+      "label": "How We Support Link"
+    },
+    {
+      "type": "header",
+      "content": "Call-to-Action Buttons"
+    },
+    {
+      "type": "text",
+      "id": "primary_button_text",
+      "label": "Primary Button Text",
+      "default": "Request a Demo"
+    },
+    {
+      "type": "url",
+      "id": "primary_button_link",
+      "label": "Primary Button Link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_button_text",
+      "label": "Secondary Button Text",
+      "default": "See How We Train Crews"
+    },
+    {
+      "type": "url",
+      "id": "secondary_button_link",
+      "label": "Secondary Button Link"
+    },
+    {
+      "type": "text",
+      "id": "tertiary_button_text",
+      "label": "Tertiary Button Text",
+      "default": "Meet us on site"
+    },
+    {
+      "type": "url",
+      "id": "tertiary_button_link",
+      "label": "Tertiary Button Link",
+      "default": "#team"
+    },
+    {
+      "type": "header",
+      "content": "Social Proof"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social_proof",
+      "label": "Show Social Proof Line",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "social_proof_text",
+      "label": "Social Proof Text",
+      "default": "Trusted by 120+ SoCal crews • Avg. 4.9/5 service rating"
+    },
+    {
+      "type": "header",
+      "content": "Credibility Modules"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_kpi_snapshots",
+      "label": "Show KPI Snapshots",
+      "default": true,
+      "info": "Display animated statistics pills"
+    },
+    {
+      "type": "number",
+      "id": "kpi_projects",
+      "label": "Projects Equipped Count",
+      "default": 120
+    },
+    {
+      "type": "number",
+      "id": "kpi_rampup",
+      "label": "Crew Ramp-Up Days",
+      "default": 3
+    },
+    {
+      "type": "text",
+      "id": "kpi_satisfaction",
+      "label": "Support Satisfaction Rating",
+      "default": "4.9"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_partner_badges",
+      "label": "Show Partner Badges",
+      "default": true,
+      "info": "Display partner logos (configure in blocks)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_testimonial_marquee",
+      "label": "Show Testimonial Marquee",
+      "default": true,
+      "info": "Auto-rotating testimonials (configure in blocks)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_service_map",
+      "label": "Show Service Area Map Chip",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_compliance_chip",
+      "label": "Show Compliance/Safety Chip",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "compliance_text",
+      "label": "Compliance Text",
+      "default": "Full certifications, safety training programs"
+    },
+    {
+      "type": "header",
+      "content": "Optional Features"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_video_cameo",
+      "label": "Show Video Cameo",
+      "default": false,
+      "info": "Display a small background video"
+    },
+    {
+      "type": "text",
+      "id": "video_url",
+      "label": "Video URL",
+      "info": "MP4 video file URL (12-18 seconds, muted loop recommended)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_timeline",
+      "label": "Show Process Timeline",
+      "default": true,
+      "info": "Display Assess → Equip → Train → Support timeline"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_mobile_sticky",
+      "label": "Show Mobile Sticky CTA",
+      "default": true,
+      "info": "Display sticky call-to-action on mobile when section is in view"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "partner_logo",
+      "name": "Partner Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "Partner Logo"
+        },
+        {
+          "type": "text",
+          "id": "alt_text",
+          "label": "Alt Text",
+          "default": "Partner Logo"
+        }
+      ]
+    },
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "DirtPrep transformed our operation. Setup was seamless and the training was excellent."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author Name",
+          "default": "John Smith"
+        },
+        {
+          "type": "text",
+          "id": "company",
+          "label": "Company",
+          "default": "ABC Construction"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "DirtPrep About Us",
+      "category": "Custom",
+      "settings": {
+        "heading": "We help crews adopt construction tech—fast",
+        "subheading": "Training, setup, and support for heavy civil & earthmoving",
+        "primary_button_text": "Request a Demo",
+        "secondary_button_text": "See How We Train Crews",
+        "tertiary_button_text": "Meet us on site",
+        "show_hotspots": true,
+        "show_role_toggle": true,
+        "show_micro_grid": true,
+        "show_kpi_snapshots": true,
+        "show_partner_badges": true,
+        "show_testimonial_marquee": true,
+        "show_service_map": true,
+        "show_compliance_chip": true,
+        "show_timeline": true,
+        "show_mobile_sticky": true,
+        "kpi_projects": 120,
+        "kpi_rampup": 3,
+        "kpi_satisfaction": "4.9"
+      },
+      "blocks": [
+        {
+          "type": "partner_logo",
+          "settings": {
+            "alt_text": "Leica Geosystems"
+          }
+        },
+        {
+          "type": "partner_logo", 
+          "settings": {
+            "alt_text": "AGTEK"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "DirtPrep transformed our operation. Setup was seamless and the training was excellent.",
+            "author": "Mike Johnson",
+            "company": "Pacific Grading"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Best investment we've made. Our accuracy improved dramatically.",
+            "author": "Sarah Davis",
+            "company": "Golden State Excavation"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Professional team, reliable support. Highly recommended.",
+            "author": "Tom Rodriguez",
+            "company": "SoCal Infrastructure"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
