@@ -379,7 +379,7 @@
 
   .dirtprep-about {
     position: relative;
-    padding: 4rem 0;
+    padding: 4rem 2rem;
     background: linear-gradient(135deg, #fafafa 0%, #f0f2f5 100%);
     overflow: hidden;
   }
@@ -387,6 +387,9 @@
   .dirtprep-about__container {
     position: relative;
     z-index: 2;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1rem;
   }
 
   .dirtprep-about__grid {
@@ -1100,6 +1103,14 @@
 
   /* Responsive Design */
   @media screen and (max-width: 1199px) {
+    .dirtprep-about {
+      padding: 4rem 1.5rem;
+    }
+
+    .dirtprep-about__container {
+      padding: 0 0.75rem;
+    }
+
     .dirtprep-about__grid {
       gap: 3rem;
     }
@@ -1111,7 +1122,11 @@
 
   @media screen and (max-width: 768px) {
     .dirtprep-about {
-      padding: 3rem 0;
+      padding: 3rem 1rem;
+    }
+
+    .dirtprep-about__container {
+      padding: 0 0.5rem;
     }
 
     .dirtprep-about__grid {
