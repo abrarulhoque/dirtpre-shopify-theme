@@ -35,7 +35,7 @@
     <div class="dirtprep-demo__hero">
       <!-- Overlapping Photo Card -->
       {% if section.settings.hero_image != blank %}
-        <div class="dirtprep-demo__hero-card" data-parallax-card>
+        <div class="dirtprep-demo__hero-card">
           {{
             section.settings.hero_image
             | image_url: width: 600
@@ -615,10 +615,19 @@
   .form-group textarea {
     width: 100%;
     padding: 0.75rem;
-    border: 2px solid var(--dirtprep-gray-light);
+    border: 2px solid #e5e7eb;
     border-radius: 8px;
     font-size: 1rem;
-    transition: border-color 0.3s ease;
+    background: var(--dirtprep-white);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .form-group input:hover,
+  .form-group select:hover,
+  .form-group textarea:hover {
+    border-color: #d1d5db;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
   }
 
   .form-group input:focus,
@@ -626,7 +635,7 @@
   .form-group textarea:focus {
     outline: none;
     border-color: var(--dirtprep-red);
-    box-shadow: 0 0 0 3px rgba(227, 30, 36, 0.1);
+    box-shadow: 0 0 0 3px rgba(227, 30, 36, 0.1), 0 2px 8px rgba(0, 0, 0, 0.15);
   }
 
   .form-hint {
@@ -1167,7 +1176,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const responsePledge = demoSection.querySelector('[data-response-pledge]');
   const faqItems = demoSection.querySelectorAll('.faq-item');
   const mobileSticky = demoSection.querySelector('[data-mobile-sticky]');
-  const heroCard = demoSection.querySelector('[data-parallax-card]');
 
   // Tab switching functionality
   formTabs.forEach(tab => {
@@ -1392,22 +1400,22 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Parallax effect for hero card
-  function handleParallax() {
-    if (!heroCard || window.innerWidth <= 768) return;
-    
-    const rect = heroCard.getBoundingClientRect();
-    const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-    
-    if (isVisible) {
-      const scrolled = window.pageYOffset;
-      const rate = scrolled * -0.3;
-      heroCard.style.transform = `translateY(${rate * 0.1}px)`;
-    }
-  }
+  // Parallax effect disabled - image stays static
+  // function handleParallax() {
+  //   if (!heroCard || window.innerWidth <= 768) return;
+  //   
+  //   const rect = heroCard.getBoundingClientRect();
+  //   const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+  //   
+  //   if (isVisible) {
+  //     const scrolled = window.pageYOffset;
+  //     const rate = scrolled * -0.3;
+  //     heroCard.style.transform = `translateY(${rate * 0.1}px)`;
+  //   }
+  // }
 
-  window.addEventListener('scroll', handleParallax);
-  handleParallax(); // Initial call
+  // window.addEventListener('scroll', handleParallax);
+  // handleParallax(); // Initial call
 
   // Mobile sticky CTA functionality
   if (mobileSticky && window.innerWidth <= 768) {
