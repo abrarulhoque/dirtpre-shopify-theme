@@ -405,13 +405,12 @@
   .dirtprep-about__d-mask {
     position: relative;
     width: 100%;
-    height: 500px;
+    aspect-ratio: 1 / 1;
     overflow: hidden;
-    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'%3E%3Cpath d='M50 50 L50 200 Q50 250 75 275 Q100 300 150 325 Q200 350 250 325 Q300 300 325 275 Q350 250 350 200 L350 50 L300 50 L300 180 Q300 220 280 240 Q260 260 220 280 Q180 300 150 280 Q120 260 100 240 Q80 220 80 180 L80 50 Z' fill='white'/%3E%3C/svg%3E");
-    mask-size: contain;
-    mask-repeat: no-repeat;
-    mask-position: center;
-    border-radius: 20px;
+    /* proper D: white shows, black hides (inner hole subtracted) */
+    -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='black'/><path fill='white' fill-rule='evenodd' d='M8,8 H42 C82,8 92,30 92,50 92,70 82,92 42,92 H8 Z M23,23 H40 C66,23 74,36 74,50 74,64 66,77 40,77 H23 Z'/></svg>") no-repeat center / contain;
+    mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='black'/><path fill='white' fill-rule='evenodd' d='M8,8 H42 C82,8 92,30 92,50 92,70 82,92 42,92 H8 Z M23,23 H40 C66,23 74,36 74,50 74,64 66,77 40,77 H23 Z'/></svg>") no-repeat center / contain;
+    border-radius: 0;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
   }
@@ -424,7 +423,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
+    object-position: center 40%;
     transition: transform 0.6s ease;
   }
 
@@ -1106,7 +1105,7 @@
     }
     
     .dirtprep-about__d-mask {
-      height: 400px;
+      aspect-ratio: 1 / 1;
     }
   }
 
@@ -1121,7 +1120,7 @@
     }
 
     .dirtprep-about__d-mask {
-      height: 350px;
+      aspect-ratio: 1 / 1;
     }
 
     .dirtprep-about__heading {
