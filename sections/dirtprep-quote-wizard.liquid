@@ -1,0 +1,1501 @@
+{% liquid
+  assign fetch_priority = 'auto'
+  if section.index == 1
+    assign fetch_priority = 'high'
+  endif
+
+  assign sizes = '100vw'
+  assign widths = '375, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+%}
+
+<section 
+  id="DirtPrepQuoteWizard-{{ section.id }}" 
+  class="dirtprep-quote-wizard color-{{ section.settings.color_scheme }}"
+  style="
+    --section-min-height: {{ section.settings.section_height }}vh;
+    --content-max-width: {{ section.settings.content_max_width }}px;
+  "
+>
+  {% if section.settings.background_image != blank %}
+    <div class="dirtprep-quote-wizard__background">
+      {{
+        section.settings.background_image
+        | image_url: width: 3840
+        | image_tag:
+          loading: 'lazy',
+          fetchpriority: fetch_priority,
+          width: section.settings.background_image.width,
+          height: section.settings.background_image.height,
+          class: 'dirtprep-quote-wizard__image',
+          sizes: sizes,
+          widths: widths,
+          alt: section.settings.background_image.alt
+      }}
+      <div class="dirtprep-quote-wizard__diagonal-mask"></div>
+    </div>
+  {% endif %}
+
+  <!-- Leica-style HUD overlay -->
+  <div class="dirtprep-quote-wizard__hud-overlay">
+    <svg class="hud-grid" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+          <path d="M 50 0 L 0 0 0 50" fill="none" stroke="rgba(227, 30, 36, 0.1)" stroke-width="1"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#grid)" opacity="0.6"/>
+      <g class="hud-elements">
+        <text x="50" y="40" class="hud-text">SLOPE: 3.2%</text>
+        <text x="50" y="70" class="hud-text">CUT: -2.4'</text>
+        <text x="50" y="100" class="hud-text">FILL: +1.8'</text>
+        <circle cx="200" cy="150" r="3" class="hud-point"/>
+        <circle cx="350" cy="200" r="3" class="hud-point"/>
+        <circle cx="500" cy="180" r="3" class="hud-point"/>
+        <path d="M200,150 L350,200 L500,180" class="hud-line"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="dirtprep-quote-wizard__container page-width">
+    <div class="dirtprep-quote-wizard__content">
+      <!-- Left Column: Content & Wizard -->
+      <div class="dirtprep-quote-wizard__left-column">
+        {% if section.settings.eyebrow != blank %}
+          <div class="dirtprep-quote-wizard__eyebrow">
+            {{ section.settings.eyebrow }}
+          </div>
+        {% endif %}
+
+        {% if section.settings.headline != blank %}
+          <h1 class="dirtprep-quote-wizard__headline">
+            {{ section.settings.headline }}
+          </h1>
+        {% endif %}
+
+        {% if section.settings.subheading != blank %}
+          <div class="dirtprep-quote-wizard__subheading">
+            {{ section.settings.subheading }}
+          </div>
+        {% endif %}
+
+        <!-- Proof Pills -->
+        <div class="dirtprep-quote-wizard__proof-pills">
+          <span class="proof-pill">Licensed & Insured</span>
+          <span class="proof-pill">FAA Part 107 Pilots</span>
+          <span class="proof-pill">Leica Authorized</span>
+        </div>
+
+        <!-- Inline Wizard -->
+        <div class="dirtprep-quote-wizard__wizard" id="quote-wizard">
+          <form class="wizard-form" id="wizardForm">
+            <!-- Question 1: Project Type -->
+            <div class="wizard-question" data-question="1">
+              <label class="wizard-label">Project Type</label>
+              <div class="segmented-buttons" data-name="project_type">
+                <button type="button" class="segment-btn" data-value="sitework">Sitework</button>
+                <button type="button" class="segment-btn" data-value="roadway">Roadway</button>
+                <button type="button" class="segment-btn" data-value="utilities">Utilities</button>
+                <button type="button" class="segment-btn" data-value="mass_grading">Mass Grading</button>
+                <button type="button" class="segment-btn" data-value="other">Other</button>
+              </div>
+            </div>
+
+            <!-- Question 2: Project Size -->
+            <div class="wizard-question" data-question="2" style="opacity: 0.5; pointer-events: none;">
+              <label class="wizard-label" for="project-size">Estimated CY or Acreage</label>
+              <input type="text" id="project-size" name="project_size" class="wizard-input" placeholder="e.g., 5,000 CY or 10 acres">
+            </div>
+
+            <!-- Question 3: Turnaround -->
+            <div class="wizard-question" data-question="3" style="opacity: 0.5; pointer-events: none;">
+              <label class="wizard-label">Turnaround Time</label>
+              <div class="segmented-buttons" data-name="turnaround">
+                <button type="button" class="segment-btn" data-value="standard">
+                  <span class="segment-title">Standard</span>
+                  <span class="segment-subtitle">48–72h</span>
+                </button>
+                <button type="button" class="segment-btn" data-value="rush">
+                  <span class="segment-title">Rush</span>
+                  <span class="segment-subtitle">24–48h</span>
+                </button>
+                <button type="button" class="segment-btn" data-value="emergency">
+                  <span class="segment-title">Emergency</span>
+                  <span class="segment-subtitle">Same Day</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- CTAs -->
+        <div class="dirtprep-quote-wizard__ctas">
+          <button class="wizard-cta wizard-cta--primary" id="primaryCTA" disabled>
+            <span class="cta-text">Complete All Questions First</span>
+            <span class="cta-icon">→</span>
+          </button>
+          
+          {% if section.settings.secondary_cta_text != blank %}
+            <a 
+              href="{{ section.settings.secondary_cta_link | default: '#' }}" 
+              class="wizard-cta wizard-cta--secondary"
+              {% if section.settings.secondary_cta_new_tab %}target="_blank" rel="noopener"{% endif %}
+            >
+              <span class="cta-text">{{ section.settings.secondary_cta_text }}</span>
+              <span class="cta-icon">→</span>
+            </a>
+          {% endif %}
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="dirtprep-quote-wizard__quick-actions">
+          <a href="sms:{{ section.settings.phone_number | replace: ' ', '' | replace: '(', '' | replace: ')', '' | replace: '-', '' }}" class="quick-action">
+            <span class="quick-action-icon">💬</span>
+            <span class="quick-action-text">Text Us</span>
+          </a>
+          <a href="tel:{{ section.settings.phone_number | replace: ' ', '' | replace: '(', '' | replace: ')', '' | replace: '-', '' }}" class="quick-action">
+            <span class="quick-action-icon">📞</span>
+            <span class="quick-action-text">{{ section.settings.phone_number | default: 'Call (800) 455-5165' }}</span>
+          </a>
+          <a href="mailto:{{ section.settings.email | default: 'plans@dirtprep.com' }}" class="quick-action">
+            <span class="quick-action-icon">📧</span>
+            <span class="quick-action-text">Email Plans</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Column: Upload Card -->
+      <div class="dirtprep-quote-wizard__right-column">
+        <div class="upload-card">
+          <div class="upload-zone" id="uploadZone">
+            <div class="upload-icon">📁</div>
+            <div class="upload-text">
+              <div class="upload-primary">Drop PDF/DWG/ZIP here or browse</div>
+              <div class="upload-secondary">PDF, DWG, DXF, TIN, XML, ZIP</div>
+            </div>
+            <input type="file" id="fileInput" class="file-input" multiple accept=".pdf,.dwg,.dxf,.tin,.xml,.zip">
+          </div>
+          
+          <div class="upload-help">
+            <a href="#" class="upload-link">Need a template? Download our plan export guide.</a>
+          </div>
+          
+          <div class="upload-nda">
+            <span class="nda-icon">🔒</span>
+            Uploads are private. We'll sign your NDA.
+          </div>
+          
+          <div class="upload-progress" id="uploadProgress" style="display: none;">
+            <div class="file-chip">
+              <span class="file-name"></span>
+              <span class="file-size"></span>
+              <button class="file-remove">×</button>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trust Strip -->
+    <div class="dirtprep-quote-wizard__trust-strip">
+      <div class="trust-content">
+        {% if section.settings.leica_badge != blank %}
+          <div class="trust-badge">
+            {{
+              section.settings.leica_badge
+              | image_url: width: 120
+              | image_tag:
+                loading: 'lazy',
+                alt: 'Leica Geosystems Distributor',
+                class: 'trust-badge-img'
+            }}
+          </div>
+        {% endif %}
+        
+        <div class="trust-text">
+          {{ section.settings.trust_text | default: 'Official Leica Distributor • Serving CA & NV' }}
+        </div>
+        
+        <div class="trust-contact">
+          <a href="tel:{{ section.settings.phone_number | replace: ' ', '' | replace: '(', '' | replace: ')', '' | replace: '-', '' }}" class="trust-phone">
+            {{ section.settings.phone_number | default: '(800) 455-5165' }}
+          </a>
+          <span class="trust-separator">•</span>
+          <a href="sms:{{ section.settings.phone_number | replace: ' ', '' | replace: '(', '' | replace: ')', '' | replace: '-', '' }}" class="trust-text-link">
+            Text
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Sticky Bar -->
+  <div class="dirtprep-quote-wizard__mobile-bar">
+    <button class="mobile-action mobile-action--upload" id="mobileUpload">
+      <span class="mobile-icon">📁</span>
+      <span class="mobile-text">Upload</span>
+    </button>
+    <a href="tel:{{ section.settings.phone_number | replace: ' ', '' | replace: '(', '' | replace: ')', '' | replace: '-', '' }}" class="mobile-action mobile-action--call">
+      <span class="mobile-icon">📞</span>
+      <span class="mobile-text">Call</span>
+    </a>
+    <a href="sms:{{ section.settings.phone_number | replace: ' ', '' | replace: '(', '' | replace: ')', '' | replace: '-', '' }}" class="mobile-action mobile-action--text">
+      <span class="mobile-icon">💬</span>
+      <span class="mobile-text">Text</span>
+    </a>
+  </div>
+
+  <!-- Mobile Upload Drawer -->
+  <div class="mobile-upload-drawer" id="mobileUploadDrawer">
+    <div class="drawer-header">
+      <h3>Upload Your Plans</h3>
+      <button class="drawer-close" id="drawerClose">×</button>
+    </div>
+    <div class="drawer-content">
+      <div class="mobile-upload-zone" id="mobileUploadZone">
+        <div class="upload-icon">📁</div>
+        <div class="upload-text">
+          <div class="upload-primary">Tap to select files</div>
+          <div class="upload-secondary">PDF, DWG, DXF, TIN, XML, ZIP</div>
+        </div>
+        <input type="file" id="mobileFileInput" class="file-input" multiple accept=".pdf,.dwg,.dxf,.tin,.xml,.zip">
+      </div>
+      <div class="upload-nda">
+        <span class="nda-icon">🔒</span>
+        Uploads are private. We'll sign your NDA.
+      </div>
+    </div>
+  </div>
+</section>
+
+{% javascript %}
+document.addEventListener('DOMContentLoaded', function() {
+  const wizard = {
+    currentStep: 0,
+    answers: {},
+    
+    init() {
+      this.bindEvents();
+      this.updateWizardState();
+    },
+    
+    bindEvents() {
+      // Wizard form handling
+      const segmentedButtons = document.querySelectorAll('.segmented-buttons');
+      segmentedButtons.forEach(group => {
+        group.addEventListener('click', (e) => {
+          if (e.target.classList.contains('segment-btn')) {
+            this.handleSegmentSelection(e.target, group);
+          }
+        });
+      });
+      
+      // Project size input
+      const projectSizeInput = document.getElementById('project-size');
+      if (projectSizeInput) {
+        projectSizeInput.addEventListener('input', (e) => {
+          this.answers.project_size = e.target.value;
+          this.updateWizardState();
+        });
+      }
+      
+      // File upload handling
+      this.initFileUpload();
+      
+      // Mobile drawer
+      this.initMobileDrawer();
+    },
+    
+    handleSegmentSelection(button, group) {
+      // Remove active state from siblings
+      group.querySelectorAll('.segment-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // Add active state to clicked button
+      button.classList.add('active');
+      
+      // Store answer
+      const name = group.dataset.name;
+      this.answers[name] = button.dataset.value;
+      
+      // Track progress
+      if (name === 'project_type') {
+        this.currentStep = Math.max(this.currentStep, 1);
+        // Enable next question
+        const nextQuestion = document.querySelector('[data-question="2"]');
+        if (nextQuestion) {
+          nextQuestion.style.opacity = '1';
+          nextQuestion.style.pointerEvents = 'auto';
+        }
+      } else if (name === 'turnaround') {
+        this.currentStep = Math.max(this.currentStep, 3);
+      }
+      
+      this.updateWizardState();
+      
+      // Analytics
+      this.trackEvent('wizard_step_completed', {
+        step: name,
+        value: button.dataset.value
+      });
+    },
+    
+    updateWizardState() {
+      const primaryCTA = document.getElementById('primaryCTA');
+      const projectSizeInput = document.getElementById('project-size');
+      
+      // Enable Q2 if Q1 is answered
+      if (this.answers.project_type && projectSizeInput) {
+        const q2 = document.querySelector('[data-question="2"]');
+        if (q2) {
+          q2.style.opacity = '1';
+          q2.style.pointerEvents = 'auto';
+        }
+      }
+      
+      // Enable Q3 if Q2 is answered
+      if (this.answers.project_size && this.answers.project_size.trim()) {
+        const q3 = document.querySelector('[data-question="3"]');
+        if (q3) {
+          q3.style.opacity = '1';
+          q3.style.pointerEvents = 'auto';
+        }
+      }
+      
+      // Update primary CTA
+      if (this.isWizardComplete()) {
+        primaryCTA.disabled = false;
+        primaryCTA.querySelector('.cta-text').textContent = 'Get My Rough Quote';
+        primaryCTA.onclick = () => this.submitWizard();
+      }
+    },
+    
+    isWizardComplete() {
+      return this.answers.project_type && 
+             this.answers.project_size && 
+             this.answers.project_size.trim() && 
+             this.answers.turnaround;
+    },
+    
+    submitWizard() {
+      if (!this.isWizardComplete()) return;
+      
+      // Show success state
+      const primaryCTA = document.getElementById('primaryCTA');
+      primaryCTA.innerHTML = '<span class="cta-text">We\'ll email a ballpark in minutes and confirm schedule.</span>';
+      primaryCTA.disabled = true;
+      primaryCTA.classList.add('success');
+      
+      // Track completion
+      this.trackEvent('hero_wizard_completed', this.answers);
+      
+      // Here you would typically submit to your backend
+      console.log('Wizard completed:', this.answers);
+    },
+    
+    initFileUpload() {
+      const uploadZone = document.getElementById('uploadZone');
+      const fileInput = document.getElementById('fileInput');
+      const uploadProgress = document.getElementById('uploadProgress');
+      
+      if (!uploadZone || !fileInput) return;
+      
+      // Drag and drop
+      uploadZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadZone.classList.add('drag-over');
+      });
+      
+      uploadZone.addEventListener('dragleave', () => {
+        uploadZone.classList.remove('drag-over');
+      });
+      
+      uploadZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadZone.classList.remove('drag-over');
+        this.handleFiles(e.dataTransfer.files);
+      });
+      
+      // Click to upload
+      uploadZone.addEventListener('click', () => {
+        fileInput.click();
+      });
+      
+      fileInput.addEventListener('change', (e) => {
+        this.handleFiles(e.target.files);
+      });
+    },
+    
+    handleFiles(files) {
+      if (files.length === 0) return;
+      
+      this.trackEvent('hero_upload_started', {
+        file_count: files.length
+      });
+      
+      // Show progress
+      const uploadProgress = document.getElementById('uploadProgress');
+      const uploadZone = document.getElementById('uploadZone');
+      
+      if (uploadProgress && uploadZone) {
+        uploadZone.style.display = 'none';
+        uploadProgress.style.display = 'block';
+        
+        // Simulate upload progress
+        const fileChip = uploadProgress.querySelector('.file-chip');
+        const fileName = fileChip.querySelector('.file-name');
+        const fileSize = fileChip.querySelector('.file-size');
+        const progressFill = uploadProgress.querySelector('.progress-fill');
+        
+        fileName.textContent = files[0].name;
+        fileSize.textContent = this.formatFileSize(files[0].size);
+        
+        // Animate progress
+        let progress = 0;
+        const interval = setInterval(() => {
+          progress += Math.random() * 20;
+          if (progress >= 100) {
+            progress = 100;
+            clearInterval(interval);
+            this.trackEvent('hero_upload_completed', {
+              file_name: files[0].name,
+              file_size: files[0].size
+            });
+          }
+          progressFill.style.width = progress + '%';
+        }, 200);
+      }
+    },
+    
+    formatFileSize(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    },
+    
+    initMobileDrawer() {
+      const mobileUploadBtn = document.getElementById('mobileUpload');
+      const drawer = document.getElementById('mobileUploadDrawer');
+      const drawerClose = document.getElementById('drawerClose');
+      
+      if (mobileUploadBtn && drawer) {
+        mobileUploadBtn.addEventListener('click', () => {
+          drawer.classList.add('open');
+          document.body.style.overflow = 'hidden';
+        });
+      }
+      
+      if (drawerClose && drawer) {
+        drawerClose.addEventListener('click', () => {
+          drawer.classList.remove('open');
+          document.body.style.overflow = '';
+        });
+      }
+    },
+    
+    trackEvent(eventName, data = {}) {
+      // Analytics tracking - integrate with your analytics platform
+      if (typeof gtag !== 'undefined') {
+        gtag('event', eventName, data);
+      }
+      console.log('Analytics:', eventName, data);
+    }
+  };
+  
+  wizard.init();
+});
+{% endjavascript %}
+
+{% stylesheet %}
+  :root {
+    --dirtprep-red: #e31e24;
+    --dirtprep-red-dark: #c41e3a;
+    --dirtprep-red-light: #ff4757;
+    --dirtprep-white: #ffffff;
+    --dirtprep-gray-light: #f8f9fa;
+    --dirtprep-gray: #6c757d;
+    --dirtprep-gray-dark: #495057;
+    --dirtprep-dark: #2c3e50;
+    --dirtprep-black: #1a1a1a;
+  }
+
+  .dirtprep-quote-wizard {
+    position: relative;
+    min-height: var(--section-min-height);
+    background: linear-gradient(135deg, var(--dirtprep-black) 0%, var(--dirtprep-dark) 100%);
+    overflow: hidden;
+  }
+
+  .dirtprep-quote-wizard__background {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 55%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .dirtprep-quote-wizard__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .dirtprep-quote-wizard__diagonal-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      var(--dirtprep-black) 0%,
+      transparent 45%
+    );
+    z-index: 2;
+  }
+
+  .dirtprep-quote-wizard__hud-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 55%;
+    height: 100%;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0;
+    animation: hudFadeIn 1s ease-out 0.5s forwards;
+  }
+
+  .hud-grid {
+    width: 100%;
+    height: 100%;
+  }
+
+  .hud-text {
+    fill: var(--dirtprep-red);
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .hud-point {
+    fill: var(--dirtprep-red);
+    opacity: 0.8;
+  }
+
+  .hud-line {
+    stroke: var(--dirtprep-red);
+    stroke-width: 1;
+    fill: none;
+    opacity: 0.6;
+  }
+
+  .dirtprep-quote-wizard__container {
+    position: relative;
+    z-index: 10;
+    padding: 4rem 0;
+    min-height: var(--section-min-height);
+    display: flex;
+    align-items: center;
+  }
+
+  .dirtprep-quote-wizard__content {
+    display: grid;
+    grid-template-columns: 55% 45%;
+    gap: 4rem;
+    align-items: start;
+    width: 100%;
+  }
+
+  .dirtprep-quote-wizard__left-column {
+    padding-right: 2rem;
+  }
+
+  .dirtprep-quote-wizard__eyebrow {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--dirtprep-red);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    animation: slideInUp 0.8s ease-out;
+  }
+
+  .dirtprep-quote-wizard__headline {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--dirtprep-white);
+    margin: 0 0 1.5rem 0;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+    animation: slideInUp 0.8s ease-out 0.1s both;
+  }
+
+  .dirtprep-quote-wizard__subheading {
+    font-size: clamp(1.1rem, 2vw, 1.3rem);
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 2rem;
+    animation: slideInUp 0.8s ease-out 0.2s both;
+  }
+
+  .dirtprep-quote-wizard__proof-pills {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+    animation: slideInUp 0.8s ease-out 0.3s both;
+  }
+
+  .proof-pill {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--dirtprep-gray);
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+  }
+
+  .dirtprep-quote-wizard__wizard {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2.5rem;
+    backdrop-filter: blur(10px);
+    animation: slideInUp 0.8s ease-out 0.4s both;
+  }
+
+  .wizard-question {
+    margin-bottom: 2rem;
+    transition: opacity 0.3s ease, pointer-events 0.3s ease;
+  }
+
+  .wizard-question:last-child {
+    margin-bottom: 0;
+  }
+
+  .wizard-label {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--dirtprep-white);
+    margin-bottom: 1rem;
+  }
+
+  .segmented-buttons {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .segment-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--dirtprep-white);
+    padding: 0.875rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 44px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .segment-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .segment-btn.active {
+    background: var(--dirtprep-red);
+    border-color: var(--dirtprep-red);
+    color: var(--dirtprep-white);
+  }
+
+  .segment-title {
+    font-weight: 600;
+  }
+
+  .segment-subtitle {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    margin-top: 0.25rem;
+  }
+
+  .wizard-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--dirtprep-white);
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    min-height: 44px;
+  }
+
+  .wizard-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .wizard-input:focus {
+    outline: none;
+    border-color: var(--dirtprep-red);
+    box-shadow: 0 0 0 2px rgba(227, 30, 36, 0.2);
+  }
+
+  .dirtprep-quote-wizard__ctas {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    animation: slideInUp 0.8s ease-out 0.5s both;
+  }
+
+  .wizard-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem 2.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    min-height: 44px;
+    min-width: 200px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .wizard-cta--primary {
+    background: var(--dirtprep-red);
+    color: var(--dirtprep-white);
+  }
+
+  .wizard-cta--primary:not(:disabled):hover {
+    background: var(--dirtprep-red-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(227, 30, 36, 0.3);
+  }
+
+  .wizard-cta--primary:disabled {
+    background: var(--dirtprep-gray);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .wizard-cta--primary.success {
+    background: #28a745;
+  }
+
+  .wizard-cta--secondary {
+    background: transparent;
+    color: var(--dirtprep-white);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .wizard-cta--secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--dirtprep-white);
+  }
+
+  .cta-icon {
+    margin-left: 0.5rem;
+    transition: transform 0.3s ease;
+  }
+
+  .wizard-cta:hover .cta-icon {
+    transform: translateX(3px);
+  }
+
+  .dirtprep-quote-wizard__quick-actions {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    animation: slideInUp 0.8s ease-out 0.6s both;
+  }
+
+  .quick-action {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+  }
+
+  .quick-action:hover {
+    color: var(--dirtprep-red);
+  }
+
+  .quick-action-icon {
+    font-size: 1.1rem;
+  }
+
+  .dirtprep-quote-wizard__right-column {
+    padding-left: 2rem;
+    animation: slideInUp 0.8s ease-out 0.7s both;
+  }
+
+  .upload-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .upload-zone {
+    border: 2px dashed var(--dirtprep-gray);
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .upload-zone:hover,
+  .upload-zone.drag-over {
+    border-color: var(--dirtprep-red);
+    background: rgba(227, 30, 36, 0.05);
+  }
+
+  .upload-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.6;
+  }
+
+  .upload-primary {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--dirtprep-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .upload-secondary {
+    font-size: 0.9rem;
+    color: var(--dirtprep-gray);
+  }
+
+  .file-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .upload-help {
+    margin: 1.5rem 0;
+    text-align: center;
+  }
+
+  .upload-link {
+    color: var(--dirtprep-red);
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+
+  .upload-link:hover {
+    text-decoration: underline;
+  }
+
+  .upload-nda {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--dirtprep-gray);
+    text-align: center;
+  }
+
+  .nda-icon {
+    font-size: 1rem;
+  }
+
+  .upload-progress {
+    background: var(--dirtprep-gray-light);
+    border-radius: 12px;
+    padding: 2rem;
+  }
+
+  .file-chip {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .file-name {
+    flex: 1;
+    font-weight: 600;
+    color: var(--dirtprep-dark);
+  }
+
+  .file-size {
+    color: var(--dirtprep-gray);
+    font-size: 0.9rem;
+  }
+
+  .file-remove {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--dirtprep-gray);
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .file-remove:hover {
+    background: var(--dirtprep-gray-light);
+    color: var(--dirtprep-red);
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--dirtprep-gray-light);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--dirtprep-red);
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  .dirtprep-quote-wizard__trust-strip {
+    grid-column: 1 / -1;
+    margin-top: 3rem;
+    padding: 1.5rem 2rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: slideInUp 0.8s ease-out 0.8s both;
+  }
+
+  .trust-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .trust-badge-img {
+    height: 32px;
+    width: auto;
+    filter: brightness(0) invert(1);
+  }
+
+  .trust-text {
+    flex: 1;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .trust-contact {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .trust-phone,
+  .trust-text-link {
+    color: var(--dirtprep-white);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .trust-phone:hover,
+  .trust-text-link:hover {
+    color: var(--dirtprep-red);
+  }
+
+  .trust-separator {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .dirtprep-quote-wizard__mobile-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--dirtprep-white);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    display: none;
+    padding: 1rem;
+    z-index: 1000;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .mobile-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 0.75rem;
+    text-decoration: none;
+    color: var(--dirtprep-dark);
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+    min-height: 44px;
+  }
+
+  .mobile-action:hover {
+    background: var(--dirtprep-gray-light);
+  }
+
+  .mobile-action--upload {
+    background: var(--dirtprep-red);
+    color: var(--dirtprep-white);
+  }
+
+  .mobile-icon {
+    font-size: 1.2rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .mobile-text {
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .mobile-upload-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--dirtprep-white);
+    z-index: 2000;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+  }
+
+  .mobile-upload-drawer.open {
+    transform: translateY(0);
+  }
+
+  .drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .drawer-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--dirtprep-dark);
+  }
+
+  .drawer-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--dirtprep-gray);
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .drawer-content {
+    padding: 2rem 1.5rem;
+  }
+
+  .mobile-upload-zone {
+    border: 2px dashed var(--dirtprep-gray);
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @keyframes hudFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Mobile Styles */
+  @media screen and (max-width: 749px) {
+    .dirtprep-quote-wizard {
+      padding-bottom: 6rem; /* Space for mobile bar */
+    }
+
+    .dirtprep-quote-wizard__background {
+      width: 100%;
+      height: 40%;
+      top: 0;
+      right: auto;
+      left: 0;
+    }
+
+    .dirtprep-quote-wizard__diagonal-mask {
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        var(--dirtprep-black) 60%
+      );
+    }
+
+    .dirtprep-quote-wizard__hud-overlay {
+      display: none;
+    }
+
+    .dirtprep-quote-wizard__container {
+      padding: 2rem 0;
+    }
+
+    .dirtprep-quote-wizard__content {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .dirtprep-quote-wizard__left-column,
+    .dirtprep-quote-wizard__right-column {
+      padding: 0 1rem;
+    }
+
+    .dirtprep-quote-wizard__headline {
+      font-size: clamp(2rem, 8vw, 3rem);
+    }
+
+    .dirtprep-quote-wizard__proof-pills {
+      justify-content: center;
+    }
+
+    .proof-pill {
+      font-size: 0.75rem;
+      padding: 0.4rem 0.8rem;
+    }
+
+    .dirtprep-quote-wizard__wizard {
+      padding: 1.5rem;
+    }
+
+    .segmented-buttons {
+      justify-content: center;
+    }
+
+    .segment-btn {
+      flex: 1;
+      min-width: 80px;
+      font-size: 0.8rem;
+      padding: 0.75rem 1rem;
+    }
+
+    .dirtprep-quote-wizard__ctas {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .wizard-cta {
+      width: 100%;
+      max-width: 300px;
+      min-width: auto;
+    }
+
+    .dirtprep-quote-wizard__quick-actions {
+      justify-content: center;
+    }
+
+    .upload-card {
+      padding: 1.5rem;
+    }
+
+    .upload-zone {
+      padding: 2rem 1rem;
+      min-height: 150px;
+    }
+
+    .dirtprep-quote-wizard__trust-strip {
+      margin-top: 2rem;
+      padding: 1rem;
+    }
+
+    .trust-content {
+      flex-direction: column;
+      text-align: center;
+      gap: 1rem;
+    }
+
+    .trust-contact {
+      justify-content: center;
+    }
+
+    .dirtprep-quote-wizard__mobile-bar {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    /* Hide desktop upload card on mobile */
+    .dirtprep-quote-wizard__right-column {
+      display: none;
+    }
+  }
+
+  /* Tablet Styles */
+  @media screen and (min-width: 750px) and (max-width: 1199px) {
+    .dirtprep-quote-wizard__content {
+      gap: 3rem;
+    }
+
+    .dirtprep-quote-wizard__left-column {
+      padding-right: 1.5rem;
+    }
+
+    .dirtprep-quote-wizard__right-column {
+      padding-left: 1.5rem;
+    }
+
+    .upload-card {
+      padding: 2rem;
+    }
+  }
+
+  /* Accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .dirtprep-quote-wizard__hud-overlay,
+    .dirtprep-quote-wizard__eyebrow,
+    .dirtprep-quote-wizard__headline,
+    .dirtprep-quote-wizard__subheading,
+    .dirtprep-quote-wizard__proof-pills,
+    .dirtprep-quote-wizard__wizard,
+    .dirtprep-quote-wizard__ctas,
+    .dirtprep-quote-wizard__quick-actions,
+    .dirtprep-quote-wizard__right-column,
+    .dirtprep-quote-wizard__trust-strip {
+      animation: none;
+    }
+
+    .wizard-cta:hover {
+      transform: none;
+    }
+  }
+
+  /* High Contrast Mode */
+  @media (prefers-contrast: high) {
+    .wizard-cta,
+    .segment-btn {
+      border-width: 2px;
+    }
+
+    .upload-zone {
+      border-width: 3px;
+    }
+  }
+
+  /* Focus styles for keyboard navigation */
+  .segment-btn:focus,
+  .wizard-input:focus,
+  .wizard-cta:focus,
+  .quick-action:focus,
+  .upload-zone:focus {
+    outline: 3px solid var(--dirtprep-red);
+    outline-offset: 2px;
+  }
+
+  /* Tab order optimization */
+  .wizard-question[style*="pointer-events: none"] .segment-btn,
+  .wizard-question[style*="pointer-events: none"] .wizard-input {
+    tab-index: -1;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "DirtPrep Quote Wizard",
+  "tag": "section",
+  "class": "dirtprep-quote-wizard-wrapper section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image",
+      "info": "Recommended: High-quality image of construction equipment with digital display (1920x1080px or larger)"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "Construction Technology, Done Right"
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Main Headline",
+      "default": "Grade Faster. Bid Smarter."
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "3D Models, Earthwork Takeoffs & Drone Topos • Leica Machine Control Distributor for CA & NV"
+    },
+    {
+      "type": "range",
+      "id": "content_max_width",
+      "min": 400,
+      "max": 800,
+      "step": 50,
+      "unit": "px",
+      "label": "Content Max Width",
+      "default": 600
+    },
+    {
+      "type": "header",
+      "content": "Secondary CTA"
+    },
+    {
+      "type": "text",
+      "id": "secondary_cta_text",
+      "label": "Secondary Button Text",
+      "default": "Talk to a Project Engineer"
+    },
+    {
+      "type": "url",
+      "id": "secondary_cta_link",
+      "label": "Secondary Button Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "secondary_cta_new_tab",
+      "label": "Open in New Tab",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Contact Information"
+    },
+    {
+      "type": "text",
+      "id": "phone_number",
+      "label": "Phone Number",
+      "default": "(800) 455-5165"
+    },
+    {
+      "type": "email",
+      "id": "email",
+      "label": "Email Address",
+      "default": "plans@dirtprep.com"
+    },
+    {
+      "type": "header",
+      "content": "Trust Strip"
+    },
+    {
+      "type": "image_picker",
+      "id": "leica_badge",
+      "label": "Leica Distributor Badge"
+    },
+    {
+      "type": "text",
+      "id": "trust_text",
+      "label": "Trust Strip Text",
+      "default": "Official Leica Distributor • Serving CA & NV"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "section_height",
+      "min": 70,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "label": "Section Height",
+      "default": 90
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "DirtPrep Quote Wizard",
+      "category": "Custom",
+      "settings": {
+        "eyebrow": "Construction Technology, Done Right",
+        "headline": "Grade Faster. Bid Smarter.",
+        "subheading": "3D Models, Earthwork Takeoffs & Drone Topos • Leica Machine Control Distributor for CA & NV",
+        "secondary_cta_text": "Talk to a Project Engineer",
+        "phone_number": "(800) 455-5165",
+        "email": "plans@dirtprep.com",
+        "trust_text": "Official Leica Distributor • Serving CA & NV",
+        "section_height": 90,
+        "content_max_width": 600
+      }
+    }
+  ]
+}
+{% endschema %}
