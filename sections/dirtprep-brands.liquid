@@ -1,0 +1,2061 @@
+{% liquid
+  assign fetch_priority = 'auto'
+  if section.index == 1
+    assign fetch_priority = 'high'
+  endif
+
+  assign sizes = '100vw'
+  assign widths = '375, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+%}
+
+<section 
+  id="DirtPrepBrands-{{ section.id }}" 
+  class="dirtprep-brands color-{{ section.settings.color_scheme }}"
+  data-section-type="brands"
+>
+  <!-- Blueprint Background -->
+  <div class="dirtprep-brands__blueprint" aria-hidden="true">
+    <svg class="dirtprep-brands__blueprint-lines" viewBox="0 0 1400 800">
+      <defs>
+        <pattern id="brands-blueprint-grid" width="60" height="60" patternUnits="userSpaceOnUse">
+          <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(227, 30, 36, 0.08)" stroke-width="0.5"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#brands-blueprint-grid)" />
+      <!-- Technical Drawing Lines -->
+      <path class="blueprint-tech-line" d="M100,200 L1300,200" stroke="rgba(227, 30, 36, 0.1)" stroke-width="1" stroke-dasharray="10,5"/>
+      <path class="blueprint-tech-line" d="M100,400 L1300,400" stroke="rgba(227, 30, 36, 0.1)" stroke-width="1" stroke-dasharray="10,5"/>
+      <path class="blueprint-tech-line" d="M100,600 L1300,600" stroke="rgba(227, 30, 36, 0.1)" stroke-width="1" stroke-dasharray="10,5"/>
+    </svg>
+  </div>
+
+  <div class="dirtprep-brands__container page-width">
+    
+    <!-- Section Header -->
+    <div class="dirtprep-brands__header">
+      {% if section.settings.heading != blank %}
+        <h2 class="dirtprep-brands__heading">
+          <span class="crane-lifted">{{ section.settings.heading }}</span>
+        </h2>
+      {% endif %}
+      
+      {% if section.settings.subheading != blank %}
+        <p class="dirtprep-brands__subheading">{{ section.settings.subheading }}</p>
+      {% endif %}
+    </div>
+
+    <!-- Search & Filter Bar -->
+    <div class="dirtprep-brands__controls" data-sticky-controls>
+      
+      <!-- Search Input -->
+      <div class="brands-search">
+        <div class="search-input-wrapper">
+          <input 
+            type="text" 
+            class="brands-search__input" 
+            placeholder="Search solutions, brands, or features..."
+            data-search-input
+            autocomplete="off"
+          >
+          <div class="search-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="21 21l-4.35-4.35"></path>
+            </svg>
+          </div>
+          <button class="search-clear" data-search-clear aria-label="Clear search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filter Chips -->
+      <div class="brands-filters">
+        <div class="filter-chips" data-filter-chips>
+          <button class="filter-chip active" data-filter="all" data-anchor="all">
+            <span>All Solutions</span>
+            <span class="chip-count" data-count-all>{{ section.blocks.size }}</span>
+          </button>
+          <button class="filter-chip" data-filter="field" data-anchor="field">
+            <span>Field</span>
+            <span class="chip-count" data-count-field>0</span>
+          </button>
+          <button class="filter-chip" data-filter="modeling" data-anchor="modeling">
+            <span>Modeling</span>
+            <span class="chip-count" data-count-modeling>0</span>
+          </button>
+          <button class="filter-chip" data-filter="rentals" data-anchor="rentals">
+            <span>Rentals</span>
+            <span class="chip-count" data-count-rentals>0</span>
+          </button>
+          <button class="filter-chip" data-filter="training" data-anchor="training">
+            <span>Training</span>
+            <span class="chip-count" data-count-training>0</span>
+          </button>
+          <button class="filter-chip" data-filter="software" data-anchor="software">
+            <span>Software</span>
+            <span class="chip-count" data-count-software>0</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Results Summary -->
+      <div class="brands-results-summary">
+        <span class="results-count" data-results-count>{{ section.blocks.size }}</span>
+        <span class="results-text">solutions available</span>
+        <div class="results-actions">
+          <button class="clear-filters" data-clear-filters style="display: none;">Clear filters</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Brands Grid -->
+    <div class="dirtprep-brands__grid" data-brands-grid>
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'brand_card' %}
+            <div 
+              class="brand-card" 
+              data-brand-card
+              data-categories="{{ block.settings.categories | join: ',' }}"
+              data-keywords="{{ block.settings.keywords | default: block.settings.title | append: ' ' | append: block.settings.description | append: ' ' | append: block.settings.categories | join: ' ' | downcase }}"
+              data-block-id="{{ block.id }}"
+            >
+              <!-- Card Header with Image/Logo -->
+              <div class="brand-card__header">
+                {% if block.settings.image != blank %}
+                  <div class="brand-card__image" data-parallax-image>
+                    {{
+                      block.settings.image
+                      | image_url: width: 400
+                      | image_tag:
+                        loading: 'lazy',
+                        fetchpriority: fetch_priority,
+                        alt: block.settings.image_alt | default: block.settings.title,
+                        class: 'brand-image',
+                        sizes: '(max-width: 767px) 100vw, (max-width: 1199px) 50vw, 33vw',
+                        widths: '300, 400, 500, 600'
+                    }}
+                    
+                    <!-- Interactive Elements for Machine Control -->
+                    {% if block.settings.show_before_after %}
+                      <div class="before-after-slider" data-before-after>
+                        <div class="before-after__container">
+                          {% if block.settings.before_image != blank %}
+                            <div class="before-after__before">
+                              {{
+                                block.settings.before_image
+                                | image_url: width: 400
+                                | image_tag:
+                                  loading: 'lazy',
+                                  alt: 'Before: Raw terrain',
+                                  class: 'before-image'
+                              }}
+                              <div class="before-after__label">Raw Terrain</div>
+                            </div>
+                          {% endif %}
+                          {% if block.settings.after_image != blank %}
+                            <div class="before-after__after">
+                              {{
+                                block.settings.after_image
+                                | image_url: width: 400
+                                | image_tag:
+                                  loading: 'lazy',
+                                  alt: 'After: 3D Model overlay',
+                                  class: 'after-image'
+                              }}
+                              <div class="before-after__label">3D Model</div>
+                            </div>
+                          {% endif %}
+                          <div class="before-after__handle" data-drag-handle>
+                            <div class="handle-line"></div>
+                            <div class="handle-grip">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="5,12 10,7 10,17"></polyline>
+                                <polyline points="19,12 14,7 14,17"></polyline>
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% endif %}
+                  </div>
+                {% endif %}
+
+                <!-- Trust Badges -->
+                <div class="brand-card__badges">
+                  {% if block.settings.badge_onsite %}
+                    <span class="brand-badge brand-badge--onsite">On-site</span>
+                  {% endif %}
+                  {% if block.settings.badge_sameday %}
+                    <span class="brand-badge brand-badge--sameday">Same-day</span>
+                  {% endif %}
+                  {% if block.settings.badge_certified %}
+                    <span class="brand-badge brand-badge--certified">Certified</span>
+                  {% endif %}
+                </div>
+
+                <!-- Category Tags -->
+                <div class="brand-card__categories">
+                  {% assign category_list = block.settings.categories | split: ',' %}
+                  {% for category in category_list %}
+                    <span class="category-tag">{{ category | strip }}</span>
+                  {% endfor %}
+                </div>
+              </div>
+
+              <!-- Card Content -->
+              <div class="brand-card__content">
+                {% if block.settings.title != blank %}
+                  <h3 class="brand-card__title">{{ block.settings.title }}</h3>
+                {% endif %}
+
+                {% if block.settings.description != blank %}
+                  <p class="brand-card__description">{{ block.settings.description }}</p>
+                {% endif %}
+
+                <!-- Quick Features List -->
+                {% if block.settings.features != blank %}
+                  <ul class="brand-card__features">
+                    {% assign features_list = block.settings.features | split: ',' %}
+                    {% for feature in features_list limit: 3 %}
+                      <li>{{ feature | strip }}</li>
+                    {% endfor %}
+                    {% if features_list.size > 3 %}
+                      <li class="features-more">+{{ features_list.size | minus: 3 }} more</li>
+                    {% endif %}
+                  </ul>
+                {% endif %}
+
+                <!-- Quick Stats/KPIs (shown on hover) -->
+                {% if block.settings.mini_kpi_label != blank and block.settings.mini_kpi_value != blank %}
+                  <div class="brand-card__mini-kpi" data-mini-kpi>
+                    <div class="kpi-value">{{ block.settings.mini_kpi_value }}</div>
+                    <div class="kpi-label">{{ block.settings.mini_kpi_label }}</div>
+                  </div>
+                {% endif %}
+              </div>
+
+              <!-- Card Actions -->
+              <div class="brand-card__actions">
+                <button class="brand-card__details-btn" data-open-drawer>
+                  <span class="btn-text">Details</span>
+                  <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9,18 15,12 9,6"></polyline>
+                  </svg>
+                </button>
+
+                <!-- Spec Sheet Links -->
+                {% if block.settings.spec_sheet_url != blank %}
+                  <a href="{{ block.settings.spec_sheet_url }}" class="spec-sheet-link" target="_blank" rel="noopener">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14,2 14,8 20,8"></polyline>
+                      <line x1="16" y1="13" x2="8" y2="13"></line>
+                      <line x1="16" y1="17" x2="8" y2="17"></line>
+                      <polyline points="10,9 9,9 8,9"></polyline>
+                    </svg>
+                    <span>Specs</span>
+                  </a>
+                {% endif %}
+              </div>
+
+              <!-- Hover/Details Drawer -->
+              <div class="brand-card__drawer" data-card-drawer>
+                <div class="drawer-content">
+                  <!-- Full Features List -->
+                  {% if block.settings.features != blank %}
+                    <div class="drawer-section">
+                      <h4>Key Features</h4>
+                      <ul class="drawer-features">
+                        {% assign all_features = block.settings.features | split: ',' %}
+                        {% for feature in all_features %}
+                          <li>{{ feature | strip }}</li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  {% endif %}
+
+                  <!-- Benefits -->
+                  {% if block.settings.benefits != blank %}
+                    <div class="drawer-section">
+                      <h4>Benefits</h4>
+                      <ul class="drawer-benefits">
+                        {% assign benefits_list = block.settings.benefits | split: ',' %}
+                        {% for benefit in benefits_list %}
+                          <li>{{ benefit | strip }}</li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  {% endif %}
+
+                  <!-- Use Cases -->
+                  {% if block.settings.use_cases != blank %}
+                    <div class="drawer-section">
+                      <h4>Best For</h4>
+                      <p class="drawer-use-cases">{{ block.settings.use_cases }}</p>
+                    </div>
+                  {% endif %}
+
+                  <!-- Persistent CTAs -->
+                  <div class="drawer-ctas">
+                    {% if block.settings.primary_cta_text != blank %}
+                      <a href="{{ block.settings.primary_cta_link | default: '#' }}" class="drawer-cta drawer-cta--primary">
+                        {{ block.settings.primary_cta_text }}
+                      </a>
+                    {% endif %}
+                    
+                    {% if block.settings.secondary_cta_text != blank %}
+                      <a href="{{ block.settings.secondary_cta_link | default: '#' }}" class="drawer-cta drawer-cta--secondary">
+                        {{ block.settings.secondary_cta_text }}
+                      </a>
+                    {% endif %}
+                  </div>
+                </div>
+                
+                <button class="drawer-close" data-close-drawer aria-label="Close details">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+
+    <!-- No Results State -->
+    <div class="dirtprep-brands__no-results" data-no-results style="display: none;">
+      <div class="no-results-content">
+        <div class="no-results-icon">🔍</div>
+        <h3>No solutions found</h3>
+        <p>Try adjusting your search or filter criteria.</p>
+        <button class="no-results-reset" data-reset-all>Show all solutions</button>
+      </div>
+    </div>
+
+    <!-- Call-to-Action Footer -->
+    {% if section.settings.show_cta_footer %}
+      <div class="dirtprep-brands__cta-footer">
+        {% if section.settings.cta_heading != blank %}
+          <h3 class="cta-footer__heading">{{ section.settings.cta_heading }}</h3>
+        {% endif %}
+        
+        {% if section.settings.cta_description != blank %}
+          <p class="cta-footer__description">{{ section.settings.cta_description }}</p>
+        {% endif %}
+
+        <div class="cta-footer__buttons">
+          {% if section.settings.cta_primary_text != blank %}
+            <a href="{{ section.settings.cta_primary_link | default: '#' }}" class="cta-footer__button cta-footer__button--primary">
+              {{ section.settings.cta_primary_text }}
+            </a>
+          {% endif %}
+          
+          {% if section.settings.cta_secondary_text != blank %}
+            <a href="{{ section.settings.cta_secondary_link | default: '#' }}" class="cta-footer__button cta-footer__button--secondary">
+              {{ section.settings.cta_secondary_text }}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+{% stylesheet %}
+  :root {
+    --dirtprep-red: #e31e24;
+    --dirtprep-red-dark: #c41e3a;
+    --dirtprep-red-light: #ff4757;
+    --dirtprep-white: #ffffff;
+    --dirtprep-gray-light: #f8f9fa;
+    --dirtprep-gray: #6c757d;
+    --dirtprep-gray-dark: #495057;
+    --dirtprep-dark: #2c3e50;
+    --dirtprep-black: #1a1a1a;
+  }
+
+  .dirtprep-brands {
+    position: relative;
+    padding: 4rem 0;
+    background: linear-gradient(135deg, #fafafa 0%, #f0f2f5 100%);
+    overflow: hidden;
+  }
+
+  /* Blueprint Background */
+  .dirtprep-brands__blueprint {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0.4;
+  }
+
+  .dirtprep-brands__blueprint-lines {
+    width: 100%;
+    height: 100%;
+  }
+
+  .blueprint-tech-line {
+    stroke-dasharray: 10,5;
+    animation: blueprintFlow 8s linear infinite;
+  }
+
+  @keyframes blueprintFlow {
+    0% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: -30; }
+  }
+
+  .dirtprep-brands__container {
+    position: relative;
+    z-index: 2;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* Section Header */
+  .dirtprep-brands__header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .dirtprep-brands__heading {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin: 0 0 1rem 0;
+    color: var(--dirtprep-dark);
+  }
+
+  .crane-lifted {
+    display: inline-block;
+    animation: craneHook 1s ease-out 0.5s both;
+  }
+
+  @keyframes craneHook {
+    0% {
+      transform: translateY(10px);
+      opacity: 0.8;
+    }
+    70% {
+      transform: translateY(-5px);
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .dirtprep-brands__subheading {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--dirtprep-gray-dark);
+    line-height: 1.4;
+    margin: 0;
+    max-width: 60ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Controls Bar (Search + Filters) */
+  .dirtprep-brands__controls {
+    background: var(--dirtprep-white);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(227, 30, 36, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .dirtprep-brands__controls.is-sticky {
+    position: sticky;
+    top: 20px;
+    z-index: 100;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    border-color: var(--dirtprep-red);
+  }
+
+  /* Search Input */
+  .brands-search {
+    margin-bottom: 1.5rem;
+  }
+
+  .search-input-wrapper {
+    position: relative;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .brands-search__input {
+    width: 100%;
+    padding: 1rem 3rem 1rem 3rem;
+    border: 2px solid var(--dirtprep-gray-light);
+    border-radius: 12px;
+    font-size: 1rem;
+    background: var(--dirtprep-white);
+    transition: all 0.3s ease;
+    outline: none;
+  }
+
+  .brands-search__input:focus {
+    border-color: var(--dirtprep-red);
+    box-shadow: 0 0 0 3px rgba(227, 30, 36, 0.1);
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--dirtprep-gray);
+    pointer-events: none;
+  }
+
+  .search-clear {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--dirtprep-gray);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+    opacity: 0;
+    transition: all 0.2s ease;
+  }
+
+  .search-clear.visible {
+    opacity: 1;
+  }
+
+  .search-clear:hover {
+    color: var(--dirtprep-red);
+    background: var(--dirtprep-gray-light);
+  }
+
+  /* Filter Chips */
+  .brands-filters {
+    margin-bottom: 1rem;
+  }
+
+  .filter-chips {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .filter-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border: 2px solid var(--dirtprep-gray-light);
+    background: var(--dirtprep-white);
+    color: var(--dirtprep-gray-dark);
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .filter-chip::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(227, 30, 36, 0.1), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .filter-chip:hover::before {
+    left: 100%;
+  }
+
+  .filter-chip:hover {
+    border-color: var(--dirtprep-red);
+    color: var(--dirtprep-red);
+    transform: translateY(-2px);
+  }
+
+  .filter-chip.active {
+    background: var(--dirtprep-red);
+    border-color: var(--dirtprep-red);
+    color: var(--dirtprep-white);
+    box-shadow: 0 4px 15px rgba(227, 30, 36, 0.3);
+  }
+
+  .chip-count {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.125rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .filter-chip.active .chip-count {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  /* Results Summary */
+  .brands-results-summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--dirtprep-gray-dark);
+  }
+
+  .results-count {
+    font-weight: 700;
+    color: var(--dirtprep-red);
+  }
+
+  .clear-filters {
+    background: none;
+    border: none;
+    color: var(--dirtprep-red);
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 0.85rem;
+    margin-left: 1rem;
+    transition: color 0.2s ease;
+  }
+
+  .clear-filters:hover {
+    color: var(--dirtprep-red-dark);
+  }
+
+  /* Brands Grid */
+  .dirtprep-brands__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  /* Brand Cards */
+  .brand-card {
+    background: var(--dirtprep-white);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s ease;
+    position: relative;
+    border: 1px solid transparent;
+  }
+
+  .brand-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    border-color: rgba(227, 30, 36, 0.2);
+  }
+
+  /* Card Header */
+  .brand-card__header {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .brand-card__image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+  }
+
+  .brand-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.6s ease;
+  }
+
+  .brand-card:hover .brand-image {
+    transform: scale(1.05);
+  }
+
+  /* Before/After Slider */
+  .before-after-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: ew-resize;
+  }
+
+  .before-after__container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .before-after__before,
+  .before-after__after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .before-after__after {
+    clip-path: inset(0 50% 0 0);
+    transition: clip-path 0.3s ease;
+  }
+
+  .before-image,
+  .after-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .before-after__label {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .before-after__handle {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 4px;
+    height: 100%;
+    background: var(--dirtprep-red);
+    cursor: ew-resize;
+    z-index: 3;
+    transform: translateX(-50%);
+  }
+
+  .handle-line {
+    width: 100%;
+    height: 100%;
+    background: var(--dirtprep-red);
+    box-shadow: 0 0 10px rgba(227, 30, 36, 0.5);
+  }
+
+  .handle-grip {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    background: var(--dirtprep-red);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 4px 15px rgba(227, 30, 36, 0.4);
+  }
+
+  /* Trust Badges */
+  .brand-card__badges {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 2;
+  }
+
+  .brand-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .brand-badge--onsite {
+    background: #28a745;
+    color: white;
+  }
+
+  .brand-badge--sameday {
+    background: #ffc107;
+    color: #212529;
+  }
+
+  .brand-badge--certified {
+    background: #007bff;
+    color: white;
+  }
+
+  /* Category Tags */
+  .brand-card__categories {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    z-index: 2;
+  }
+
+  .category-tag {
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--dirtprep-dark);
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    backdrop-filter: blur(4px);
+  }
+
+  /* Card Content */
+  .brand-card__content {
+    padding: 1.5rem;
+    position: relative;
+  }
+
+  .brand-card__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--dirtprep-dark);
+    margin: 0 0 0.75rem 0;
+    line-height: 1.3;
+  }
+
+  .brand-card__description {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--dirtprep-gray-dark);
+    margin: 0 0 1rem 0;
+  }
+
+  .brand-card__features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem 0;
+  }
+
+  .brand-card__features li {
+    position: relative;
+    padding-left: 1.25rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--dirtprep-gray-dark);
+  }
+
+  .brand-card__features li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--dirtprep-red);
+    font-weight: 700;
+  }
+
+  .features-more {
+    font-style: italic;
+    color: var(--dirtprep-gray);
+  }
+
+  /* Mini KPI */
+  .brand-card__mini-kpi {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(227, 30, 36, 0.1);
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+  }
+
+  .brand-card:hover .brand-card__mini-kpi {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .kpi-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--dirtprep-red);
+    line-height: 1;
+  }
+
+  .kpi-label {
+    font-size: 0.7rem;
+    color: var(--dirtprep-gray-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Card Actions */
+  .brand-card__actions {
+    padding: 0 1.5rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .brand-card__details-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: var(--dirtprep-red);
+    color: var(--dirtprep-white);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+    justify-content: center;
+    margin-right: 1rem;
+  }
+
+  .brand-card__details-btn:hover {
+    background: var(--dirtprep-red-dark);
+    transform: translateY(-2px);
+  }
+
+  .spec-sheet-link {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.75rem;
+    background: var(--dirtprep-gray-light);
+    color: var(--dirtprep-gray-dark);
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .spec-sheet-link:hover {
+    background: var(--dirtprep-gray);
+    color: var(--dirtprep-white);
+  }
+
+  /* Card Drawer */
+  .brand-card__drawer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--dirtprep-white);
+    border-radius: 16px;
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+    transition: all 0.4s ease;
+    z-index: 10;
+    overflow-y: auto;
+  }
+
+  .brand-card__drawer.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .drawer-content {
+    padding: 2rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .drawer-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .drawer-section h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--dirtprep-dark);
+    margin: 0 0 0.75rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--dirtprep-red);
+  }
+
+  .drawer-features,
+  .drawer-benefits {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .drawer-features li,
+  .drawer-benefits li {
+    position: relative;
+    padding-left: 1.25rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--dirtprep-gray-dark);
+    line-height: 1.4;
+  }
+
+  .drawer-features li::before,
+  .drawer-benefits li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--dirtprep-red);
+    font-weight: 700;
+  }
+
+  .drawer-use-cases {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--dirtprep-gray-dark);
+    margin: 0;
+  }
+
+  .drawer-ctas {
+    margin-top: auto;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--dirtprep-gray-light);
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .drawer-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.25rem;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .drawer-cta--primary {
+    background: var(--dirtprep-red);
+    color: var(--dirtprep-white);
+  }
+
+  .drawer-cta--primary:hover {
+    background: var(--dirtprep-red-dark);
+  }
+
+  .drawer-cta--secondary {
+    background: transparent;
+    color: var(--dirtprep-red);
+    border: 2px solid var(--dirtprep-red);
+  }
+
+  .drawer-cta--secondary:hover {
+    background: var(--dirtprep-red);
+    color: var(--dirtprep-white);
+  }
+
+  .drawer-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--dirtprep-gray-light);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--dirtprep-gray-dark);
+  }
+
+  .drawer-close:hover {
+    background: var(--dirtprep-red);
+    color: var(--dirtprep-white);
+  }
+
+  /* No Results State */
+  .dirtprep-brands__no-results {
+    text-align: center;
+    padding: 4rem 2rem;
+  }
+
+  .no-results-content {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .no-results-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.6;
+  }
+
+  .no-results-content h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--dirtprep-dark);
+    margin: 0 0 1rem 0;
+  }
+
+  .no-results-content p {
+    font-size: 1rem;
+    color: var(--dirtprep-gray-dark);
+    margin: 0 0 2rem 0;
+    line-height: 1.5;
+  }
+
+  .no-results-reset {
+    padding: 0.75rem 1.5rem;
+    background: var(--dirtprep-red);
+    color: var(--dirtprep-white);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .no-results-reset:hover {
+    background: var(--dirtprep-red-dark);
+  }
+
+  /* CTA Footer */
+  .dirtprep-brands__cta-footer {
+    text-align: center;
+    background: var(--dirtprep-white);
+    padding: 3rem 2rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(227, 30, 36, 0.1);
+  }
+
+  .cta-footer__heading {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--dirtprep-dark);
+    margin: 0 0 1rem 0;
+  }
+
+  .cta-footer__description {
+    font-size: 1.1rem;
+    color: var(--dirtprep-gray-dark);
+    margin: 0 0 2rem 0;
+    max-width: 60ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cta-footer__buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .cta-footer__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 2rem;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    min-width: 160px;
+  }
+
+  .cta-footer__button--primary {
+    background: var(--dirtprep-red);
+    color: var(--dirtprep-white);
+  }
+
+  .cta-footer__button--primary:hover {
+    background: var(--dirtprep-red-dark);
+    transform: translateY(-2px);
+  }
+
+  .cta-footer__button--secondary {
+    background: transparent;
+    color: var(--dirtprep-red);
+    border: 2px solid var(--dirtprep-red);
+  }
+
+  .cta-footer__button--secondary:hover {
+    background: var(--dirtprep-red);
+    color: var(--dirtprep-white);
+  }
+
+  /* Responsive Design */
+  @media screen and (max-width: 1199px) {
+    .dirtprep-brands__container {
+      padding: 0 1.5rem;
+    }
+
+    .dirtprep-brands__grid {
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .dirtprep-brands {
+      padding: 3rem 0;
+    }
+
+    .dirtprep-brands__container {
+      padding: 0 1rem;
+    }
+
+    .dirtprep-brands__controls {
+      padding: 1rem;
+    }
+
+    .dirtprep-brands__controls.is-sticky {
+      top: 10px;
+      margin-left: -1rem;
+      margin-right: -1rem;
+      border-radius: 0;
+    }
+
+    .search-input-wrapper {
+      max-width: none;
+    }
+
+    .filter-chips {
+      justify-content: flex-start;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .filter-chips::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-chip {
+      flex-shrink: 0;
+    }
+
+    .brands-results-summary {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .dirtprep-brands__grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .brand-card__actions {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .brand-card__details-btn {
+      margin-right: 0;
+    }
+
+    .cta-footer__buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .cta-footer__button {
+      width: 100%;
+      max-width: 280px;
+    }
+
+    /* Mobile drawer covers full card */
+    .brand-card__drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      border-radius: 0;
+      z-index: 1000;
+    }
+
+    .drawer-content {
+      padding: 3rem 1.5rem 1.5rem;
+    }
+
+    .drawer-close {
+      top: 1.5rem;
+      right: 1.5rem;
+    }
+  }
+
+  /* Hidden state for filtered cards */
+  .brand-card.hidden {
+    display: none;
+  }
+
+  /* Accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .crane-lifted,
+    .brand-card,
+    .filter-chip,
+    .blueprint-tech-line {
+      animation: none;
+      transition: none;
+    }
+
+    .brand-card:hover,
+    .filter-chip:hover {
+      transform: none;
+    }
+  }
+
+  @media (prefers-contrast: high) {
+    .brand-card,
+    .dirtprep-brands__controls,
+    .filter-chip {
+      border-width: 2px;
+      border-color: var(--dirtprep-gray);
+    }
+    
+    .filter-chip.active {
+      border-color: var(--dirtprep-red);
+    }
+  }
+
+  /* Performance optimizations */
+  .brand-image,
+  .before-image,
+  .after-image {
+    will-change: transform;
+  }
+
+  .brand-card__drawer {
+    will-change: opacity, transform;
+  }
+
+{% endstylesheet %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize brands section functionality
+  const brandsSection = document.querySelector('[data-section-type="brands"]');
+  if (!brandsSection) return;
+
+  // Cache DOM elements
+  const searchInput = brandsSection.querySelector('[data-search-input]');
+  const searchClear = brandsSection.querySelector('[data-search-clear]');
+  const filterChips = brandsSection.querySelectorAll('[data-filter]');
+  const brandCards = brandsSection.querySelectorAll('[data-brand-card]');
+  const clearFiltersBtn = brandsSection.querySelector('[data-clear-filters]');
+  const resultsCount = brandsSection.querySelector('[data-results-count]');
+  const noResults = brandsSection.querySelector('[data-no-results]');
+  const stickyControls = brandsSection.querySelector('[data-sticky-controls]');
+  const resetAllBtn = brandsSection.querySelector('[data-reset-all]');
+
+  // State management
+  let currentFilter = 'all';
+  let currentSearch = '';
+  let isSticky = false;
+
+  // Initialize counts for each filter
+  function initializeCounts() {
+    const counts = { all: 0, field: 0, modeling: 0, rentals: 0, training: 0, software: 0 };
+    
+    brandCards.forEach(card => {
+      counts.all++;
+      const categories = card.dataset.categories?.split(',') || [];
+      categories.forEach(cat => {
+        const cleanCat = cat.trim().toLowerCase();
+        if (counts[cleanCat] !== undefined) {
+          counts[cleanCat]++;
+        }
+      });
+    });
+
+    // Update count displays
+    Object.keys(counts).forEach(filter => {
+      const countEl = brandsSection.querySelector(`[data-count-${filter}]`);
+      if (countEl) countEl.textContent = counts[filter];
+    });
+  }
+
+  // Filter and search functionality
+  function filterCards() {
+    let visibleCount = 0;
+
+    brandCards.forEach(card => {
+      const categories = card.dataset.categories?.split(',') || [];
+      const keywords = card.dataset.keywords?.toLowerCase() || '';
+      
+      // Check filter match
+      const filterMatch = currentFilter === 'all' || 
+        categories.some(cat => cat.trim().toLowerCase() === currentFilter);
+      
+      // Check search match
+      const searchMatch = !currentSearch || 
+        keywords.includes(currentSearch.toLowerCase());
+
+      // Show/hide card
+      if (filterMatch && searchMatch) {
+        card.classList.remove('hidden');
+        visibleCount++;
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+
+    // Update results count
+    if (resultsCount) resultsCount.textContent = visibleCount;
+
+    // Show/hide no results
+    if (noResults) {
+      noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+
+    // Show/hide clear filters button
+    const hasActiveFilters = currentFilter !== 'all' || currentSearch !== '';
+    if (clearFiltersBtn) {
+      clearFiltersBtn.style.display = hasActiveFilters ? 'inline' : 'none';
+    }
+
+    // Update URL with anchor
+    if (currentFilter !== 'all') {
+      updateURL(currentFilter);
+    }
+  }
+
+  // URL management for deep linking
+  function updateURL(filter) {
+    const url = new URL(window.location);
+    if (filter && filter !== 'all') {
+      url.searchParams.set('cat', filter);
+    } else {
+      url.searchParams.delete('cat');
+    }
+    history.replaceState(null, '', url);
+  }
+
+  function initializeFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryFromURL = urlParams.get('cat');
+    
+    if (categoryFromURL) {
+      const targetChip = brandsSection.querySelector(`[data-filter="${categoryFromURL}"]`);
+      if (targetChip) {
+        // Update filter chips
+        filterChips.forEach(chip => chip.classList.remove('active'));
+        targetChip.classList.add('active');
+        currentFilter = categoryFromURL;
+        filterCards();
+      }
+    }
+  }
+
+  // Search functionality
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      currentSearch = this.value.trim();
+      filterCards();
+      
+      // Show/hide clear button
+      if (searchClear) {
+        searchClear.classList.toggle('visible', currentSearch.length > 0);
+      }
+    });
+  }
+
+  if (searchClear) {
+    searchClear.addEventListener('click', function() {
+      searchInput.value = '';
+      currentSearch = '';
+      this.classList.remove('visible');
+      filterCards();
+      searchInput.focus();
+    });
+  }
+
+  // Filter chip functionality
+  filterChips.forEach(chip => {
+    chip.addEventListener('click', function() {
+      const filter = this.dataset.filter;
+      
+      // Update active state
+      filterChips.forEach(c => c.classList.remove('active'));
+      this.classList.add('active');
+      
+      // Update current filter
+      currentFilter = filter;
+      filterCards();
+    });
+  });
+
+  // Clear all filters
+  if (clearFiltersBtn) {
+    clearFiltersBtn.addEventListener('click', function() {
+      // Reset search
+      if (searchInput) {
+        searchInput.value = '';
+        currentSearch = '';
+      }
+      if (searchClear) {
+        searchClear.classList.remove('visible');
+      }
+      
+      // Reset filter
+      filterChips.forEach(chip => chip.classList.remove('active'));
+      const allChip = brandsSection.querySelector('[data-filter="all"]');
+      if (allChip) allChip.classList.add('active');
+      currentFilter = 'all';
+      
+      filterCards();
+      updateURL('all');
+    });
+  }
+
+  if (resetAllBtn) {
+    resetAllBtn.addEventListener('click', function() {
+      clearFiltersBtn?.click();
+    });
+  }
+
+  // Sticky controls
+  function handleStickyControls() {
+    if (!stickyControls) return;
+
+    const rect = stickyControls.getBoundingClientRect();
+    const shouldBeSticky = rect.top <= 20;
+
+    if (shouldBeSticky !== isSticky) {
+      isSticky = shouldBeSticky;
+      stickyControls.classList.toggle('is-sticky', isSticky);
+    }
+  }
+
+  window.addEventListener('scroll', handleStickyControls);
+  handleStickyControls(); // Initial check
+
+  // Card drawer functionality
+  brandCards.forEach(card => {
+    const detailsBtn = card.querySelector('[data-open-drawer]');
+    const drawer = card.querySelector('[data-card-drawer]');
+    const closeBtn = card.querySelector('[data-close-drawer]');
+
+    if (detailsBtn && drawer) {
+      detailsBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        drawer.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+    }
+
+    if (closeBtn && drawer) {
+      closeBtn.addEventListener('click', function() {
+        drawer.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+    }
+
+    // Close drawer on outside click (desktop only)
+    if (drawer && window.innerWidth > 768) {
+      drawer.addEventListener('click', function(e) {
+        if (e.target === this) {
+          this.classList.remove('active');
+        }
+      });
+    }
+
+    // Escape key to close drawer
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && drawer?.classList.contains('active')) {
+        drawer.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+  });
+
+  // Before/After slider functionality
+  const beforeAfterSliders = brandsSection.querySelectorAll('[data-before-after]');
+  
+  beforeAfterSliders.forEach(slider => {
+    const handle = slider.querySelector('[data-drag-handle]');
+    const afterImage = slider.querySelector('.before-after__after');
+    let isDragging = false;
+
+    function updateSlider(x) {
+      const rect = slider.getBoundingClientRect();
+      const percentage = Math.max(0, Math.min(100, ((x - rect.left) / rect.width) * 100));
+      
+      if (afterImage) {
+        afterImage.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+      }
+      
+      if (handle) {
+        handle.style.left = `${percentage}%`;
+      }
+    }
+
+    if (handle) {
+      handle.addEventListener('mousedown', function(e) {
+        isDragging = true;
+        e.preventDefault();
+      });
+
+      slider.addEventListener('mousemove', function(e) {
+        if (isDragging) {
+          updateSlider(e.clientX);
+        }
+      });
+
+      slider.addEventListener('mouseup', function() {
+        isDragging = false;
+      });
+
+      slider.addEventListener('mouseleave', function() {
+        isDragging = false;
+      });
+
+      // Touch events for mobile
+      handle.addEventListener('touchstart', function(e) {
+        isDragging = true;
+        e.preventDefault();
+      });
+
+      slider.addEventListener('touchmove', function(e) {
+        if (isDragging && e.touches.length === 1) {
+          updateSlider(e.touches[0].clientX);
+        }
+      });
+
+      slider.addEventListener('touchend', function() {
+        isDragging = false;
+      });
+
+      // Click to position
+      slider.addEventListener('click', function(e) {
+        if (!isDragging) {
+          updateSlider(e.clientX);
+        }
+      });
+    }
+  });
+
+  // Parallax effect for card images
+  function handleParallax() {
+    const parallaxImages = brandsSection.querySelectorAll('[data-parallax-image]');
+    
+    parallaxImages.forEach(imageContainer => {
+      const rect = imageContainer.getBoundingClientRect();
+      const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+      
+      if (isVisible) {
+        const scrolled = window.pageYOffset;
+        const rate = scrolled * -0.5;
+        const image = imageContainer.querySelector('.brand-image');
+        
+        if (image) {
+          image.style.transform = `translateY(${rate * 0.1}px) scale(1.05)`;
+        }
+      }
+    });
+  }
+
+  window.addEventListener('scroll', handleParallax);
+  handleParallax(); // Initial call
+
+  // Initialize everything
+  initializeCounts();
+  initializeFromURL();
+  filterCards();
+
+  // Intersection Observer for animations
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const cardObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, observerOptions);
+
+  // Observe cards for entrance animation
+  brandCards.forEach((card, index) => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
+    card.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+    cardObserver.observe(card);
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "DirtPrep Brands",
+  "tag": "section",
+  "class": "dirtprep-brands-wrapper section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Main Heading",
+      "default": "Our Solutions Portfolio"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Comprehensive technology solutions for every phase of your construction project"
+    },
+    {
+      "type": "header",
+      "content": "Call-to-Action Footer"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta_footer",
+      "label": "Show CTA Footer",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_heading",
+      "label": "CTA Heading",
+      "default": "Ready to transform your operation?"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_description",
+      "label": "CTA Description",
+      "default": "Let our experts help you choose the right technology solutions for your specific needs."
+    },
+    {
+      "type": "text",
+      "id": "cta_primary_text",
+      "label": "Primary CTA Text",
+      "default": "Get Custom Recommendations"
+    },
+    {
+      "type": "url",
+      "id": "cta_primary_link",
+      "label": "Primary CTA Link"
+    },
+    {
+      "type": "text",
+      "id": "cta_secondary_text",
+      "label": "Secondary CTA Text",
+      "default": "View All Case Studies"
+    },
+    {
+      "type": "url",
+      "id": "cta_secondary_link",
+      "label": "Secondary CTA Link"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "brand_card",
+      "name": "Brand/Solution Card",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Basic Information"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Solution Title",
+          "default": "Machine Control Systems"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Advanced GPS-guided machine control for precise grading and excavation."
+        },
+        {
+          "type": "text",
+          "id": "categories",
+          "label": "Categories",
+          "info": "Comma-separated: field, modeling, rentals, training, software",
+          "default": "field, software"
+        },
+        {
+          "type": "text",
+          "id": "keywords",
+          "label": "Search Keywords",
+          "info": "Additional keywords for search (optional - title and description are automatically included)"
+        },
+        {
+          "type": "header",
+          "content": "Visual Content"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Main Image"
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "Image Alt Text"
+        },
+        {
+          "type": "header",
+          "content": "Before/After Slider (for Machine Control)"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_before_after",
+          "label": "Show Before/After Slider",
+          "default": false,
+          "info": "Interactive slider showing raw vs modeled terrain"
+        },
+        {
+          "type": "image_picker",
+          "id": "before_image",
+          "label": "Before Image (Raw Terrain)"
+        },
+        {
+          "type": "image_picker",
+          "id": "after_image",
+          "label": "After Image (3D Model)"
+        },
+        {
+          "type": "header",
+          "content": "Trust Badges"
+        },
+        {
+          "type": "checkbox",
+          "id": "badge_onsite",
+          "label": "On-site Badge",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "badge_sameday",
+          "label": "Same-day Badge",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "badge_certified",
+          "label": "Certified Badge",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Features & Benefits"
+        },
+        {
+          "type": "textarea",
+          "id": "features",
+          "label": "Key Features",
+          "info": "Comma-separated list of features",
+          "default": "GPS precision guidance, Real-time grade control, Automated blade adjustments"
+        },
+        {
+          "type": "textarea",
+          "id": "benefits",
+          "label": "Benefits",
+          "info": "Comma-separated list of benefits",
+          "default": "Reduce material costs, Improve accuracy, Faster completion times"
+        },
+        {
+          "type": "textarea",
+          "id": "use_cases",
+          "label": "Use Cases",
+          "default": "Road construction, Site preparation, Utility installation, Large earthmoving projects"
+        },
+        {
+          "type": "header",
+          "content": "Mini KPI (shown on hover)"
+        },
+        {
+          "type": "text",
+          "id": "mini_kpi_value",
+          "label": "KPI Value",
+          "default": "43"
+        },
+        {
+          "type": "text",
+          "id": "mini_kpi_label",
+          "label": "KPI Label",
+          "default": "crews trained"
+        },
+        {
+          "type": "header",
+          "content": "Call-to-Actions"
+        },
+        {
+          "type": "text",
+          "id": "primary_cta_text",
+          "label": "Primary CTA Text",
+          "default": "Request a Demo"
+        },
+        {
+          "type": "url",
+          "id": "primary_cta_link",
+          "label": "Primary CTA Link"
+        },
+        {
+          "type": "text",
+          "id": "secondary_cta_text",
+          "label": "Secondary CTA Text",
+          "default": "See Case Study"
+        },
+        {
+          "type": "url",
+          "id": "secondary_cta_link",
+          "label": "Secondary CTA Link"
+        },
+        {
+          "type": "url",
+          "id": "spec_sheet_url",
+          "label": "Spec Sheet URL",
+          "info": "Link to technical specifications PDF"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "DirtPrep Brands",
+      "category": "Custom",
+      "settings": {
+        "heading": "Our Solutions Portfolio",
+        "subheading": "Comprehensive technology solutions for every phase of your construction project",
+        "show_cta_footer": true,
+        "cta_heading": "Ready to transform your operation?",
+        "cta_description": "Let our experts help you choose the right technology solutions for your specific needs.",
+        "cta_primary_text": "Get Custom Recommendations",
+        "cta_secondary_text": "View All Case Studies"
+      },
+      "blocks": [
+        {
+          "type": "brand_card",
+          "settings": {
+            "title": "Machine Control Systems",
+            "description": "Advanced GPS-guided machine control for precise grading and excavation with real-time 3D modeling.",
+            "categories": "field, software",
+            "keywords": "GPS, grading, excavation, 3D modeling, precision",
+            "show_before_after": true,
+            "badge_onsite": true,
+            "badge_certified": true,
+            "features": "GPS precision guidance, Real-time grade control, Automated blade adjustments, 3D modeling integration",
+            "benefits": "Reduce material costs by 15%, Improve accuracy to ±1cm, Faster completion times, Eliminate rework",
+            "use_cases": "Road construction, Site preparation, Utility installation, Large earthmoving projects",
+            "mini_kpi_value": "43",
+            "mini_kpi_label": "crews trained",
+            "primary_cta_text": "Request a Demo",
+            "secondary_cta_text": "See Case Study"
+          }
+        },
+        {
+          "type": "brand_card",
+          "settings": {
+            "title": "AGTEK Software Suite",
+            "description": "Complete earthwork takeoff and project management software for accurate material calculations.",
+            "categories": "software, modeling",
+            "keywords": "takeoff, project management, material calculations, earthwork",
+            "badge_sameday": true,
+            "badge_certified": true,
+            "features": "Digital takeoffs, Material calculations, Progress tracking, Cost estimation",
+            "benefits": "95% accuracy in material estimates, Save 4 hours per bid, Real-time project tracking",
+            "use_cases": "Bidding and estimating, Project management, Material tracking, Progress monitoring",
+            "mini_kpi_value": "95%",
+            "mini_kpi_label": "estimate accuracy",
+            "primary_cta_text": "Start Free Trial",
+            "secondary_cta_text": "Watch Demo"
+          }
+        },
+        {
+          "type": "brand_card",
+          "settings": {
+            "title": "Equipment Rental Solutions",
+            "description": "Flexible rental options for all your construction technology needs with full support.",
+            "categories": "rentals, field",
+            "keywords": "rental, equipment, flexible, technology, support",
+            "badge_onsite": true,
+            "badge_sameday": true,
+            "features": "Short & long-term rentals, Setup included, 24/7 support, Training provided",
+            "benefits": "No upfront investment, Try before you buy, Expert setup and training, Flexible terms",
+            "use_cases": "Project-based needs, Technology evaluation, Seasonal demand, Backup equipment",
+            "mini_kpi_value": "24/7",
+            "mini_kpi_label": "support available",
+            "primary_cta_text": "Get Rental Quote",
+            "secondary_cta_text": "View Equipment"
+          }
+        },
+        {
+          "type": "brand_card",
+          "settings": {
+            "title": "Crew Training Programs",
+            "description": "Comprehensive on-site training programs to get your team proficient with new technology fast.",
+            "categories": "training",
+            "keywords": "training, crew, on-site, proficient, technology, certification",
+            "badge_onsite": true,
+            "badge_certified": true,
+            "features": "On-site instruction, Hands-on practice, Certification programs, Follow-up support",
+            "benefits": "3-day average to proficiency, Certified operators, Reduced learning curve, Ongoing support",
+            "use_cases": "New technology adoption, Skill development, Safety compliance, Team certification",
+            "mini_kpi_value": "3",
+            "mini_kpi_label": "days to proficiency",
+            "primary_cta_text": "Schedule Training",
+            "secondary_cta_text": "Training Curriculum"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
