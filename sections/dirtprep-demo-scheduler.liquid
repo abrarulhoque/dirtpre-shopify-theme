@@ -1,0 +1,1777 @@
+{% liquid
+  assign fetch_priority = 'auto'
+  if section.index == 1
+    assign fetch_priority = 'high'
+  endif
+
+  assign sizes = '100vw'
+  assign widths = '375, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+%}
+
+<section 
+  id="DirtPrepDemo-{{ section.id }}" 
+  class="dirtprep-demo color-{{ section.settings.color_scheme }}"
+  data-section-type="demo-scheduler"
+>
+  <!-- Blueprint Background -->
+  <div class="dirtprep-demo__blueprint" aria-hidden="true">
+    <svg class="dirtprep-demo__blueprint-lines" viewBox="0 0 1400 800">
+      <defs>
+        <pattern id="demo-blueprint-grid" width="50" height="50" patternUnits="userSpaceOnUse">
+          <path d="M 50 0 L 0 0 0 50" fill="none" stroke="rgba(227, 30, 36, 0.05)" stroke-width="0.5"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#demo-blueprint-grid)" />
+      <!-- Technical contour lines -->
+      <path class="blueprint-tech-line" d="M200,150 Q400,170 600,150 T1000,160" stroke="rgba(227, 30, 36, 0.08)" stroke-width="1" stroke-dasharray="8,4"/>
+      <path class="blueprint-tech-line" d="M200,250 Q400,270 600,250 T1000,260" stroke="rgba(227, 30, 36, 0.08)" stroke-width="1" stroke-dasharray="8,4"/>
+      <path class="blueprint-tech-line" d="M200,350 Q400,370 600,350 T1000,360" stroke="rgba(227, 30, 36, 0.08)" stroke-width="1" stroke-dasharray="8,4"/>
+    </svg>
+  </div>
+
+  <div class="dirtprep-demo__container page-width">
+    
+    <!-- Conversion Hero -->
+    <div class="dirtprep-demo__hero">
+      <!-- Overlapping Photo Card -->
+      {% if section.settings.hero_image != blank %}
+        <div class="dirtprep-demo__hero-card" data-parallax-card>
+          {{
+            section.settings.hero_image
+            | image_url: width: 600
+            | image_tag:
+              loading: 'lazy',
+              fetchpriority: fetch_priority,
+              alt: section.settings.hero_image_alt | default: 'DirtPrep technology demonstration',
+              class: 'hero-card-image',
+              sizes: '(max-width: 767px) 100vw, 50vw',
+              widths: '300, 400, 500, 600'
+          }}
+          
+          <!-- Phone Card Float -->
+          <div class="dirtprep-demo__phone-card">
+            <div class="phone-icon">📞</div>
+            <div class="phone-details">
+              <div class="phone-number">{{ section.settings.phone_number | default: '(800) 455-5165' }}</div>
+              <div class="phone-pickup">avg pickup ~12s</div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- Hero Content -->
+      <div class="dirtprep-demo__hero-content">
+        {% if section.settings.heading != blank %}
+          <h2 class="dirtprep-demo__heading">
+            <span class="crane-lifted">{{ section.settings.heading }}</span>
+          </h2>
+        {% endif %}
+        
+        {% if section.settings.subheading != blank %}
+          <p class="dirtprep-demo__subheading">{{ section.settings.subheading }}</p>
+        {% endif %}
+
+        <!-- Action Row (3 CTAs) -->
+        <div class="dirtprep-demo__actions">
+          <button class="demo-cta demo-cta--call" data-track-cta="call">
+            <div class="cta-icon">📞</div>
+            <span class="cta-text">{{ section.settings.call_text | default: 'Call now' }}</span>
+          </button>
+          
+          <button class="demo-cta demo-cta--schedule" data-track-cta="schedule" data-open-tab="schedule">
+            <div class="cta-icon">📅</div>
+            <span class="cta-text">{{ section.settings.schedule_text | default: 'Pick a time' }}</span>
+          </button>
+          
+          <button class="demo-cta demo-cta--quote" data-track-cta="quote" data-open-tab="quote">
+            <div class="cta-icon">💬</div>
+            <span class="cta-text">{{ section.settings.quote_text | default: 'Get a price' }}</span>
+          </button>
+        </div>
+
+        <!-- Micro Trust Chips -->
+        <div class="dirtprep-demo__trust-chips">
+          {% if section.settings.show_trust_chips %}
+            <span class="trust-chip">🛡️ Licensed & insured</span>
+            <span class="trust-chip">⭐ 4.9/5 support</span>
+            <span class="trust-chip">🤝 Leica / AGTEK partner</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Inline Scheduler / Form (Tabbed) -->
+    <div class="dirtprep-demo__form-section" data-form-tabs>
+      <div class="form-tabs">
+        <button class="form-tab active" data-tab="schedule">Schedule</button>
+        <button class="form-tab" data-tab="quote">Request quote</button>
+      </div>
+
+      <!-- Schedule Tab -->
+      <div class="form-content active" data-tab-content="schedule">
+        <form class="schedule-form" data-schedule-form>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="schedule-name">Full Name</label>
+              <input type="text" id="schedule-name" name="name" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="schedule-email">Email</label>
+              <input type="email" id="schedule-email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="schedule-phone">Phone</label>
+              <input type="tel" id="schedule-phone" name="phone" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="schedule-company">Company</label>
+              <input type="text" id="schedule-company" name="company">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="schedule-datetime">Preferred Date & Time</label>
+            <input type="datetime-local" id="schedule-datetime" name="datetime" required>
+            <small class="form-hint">30-min slots available. Time zone auto-detected.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="schedule-location">Project Location</label>
+            <input type="text" id="schedule-location" name="location" placeholder="City or ZIP code">
+          </div>
+
+          <div class="form-group">
+            <label for="schedule-notes">Notes (optional)</label>
+            <textarea id="schedule-notes" name="notes" rows="3" placeholder="Equipment type, project details, specific questions..."></textarea>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" name="consent" required>
+              <span class="checkmark"></span>
+              I agree to receive SMS confirmation and calendar invite
+            </label>
+          </div>
+
+          <button type="submit" class="form-submit">Book Demo</button>
+        </form>
+      </div>
+
+      <!-- Quote Tab -->
+      <div class="form-content" data-tab-content="quote">
+        <form class="quote-form" data-quote-form>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="quote-name">Full Name</label>
+              <input type="text" id="quote-name" name="name" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="quote-company">Company</label>
+              <input type="text" id="quote-company" name="company" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="quote-email">Email</label>
+              <input type="email" id="quote-email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="quote-phone">Phone</label>
+              <input type="tel" id="quote-phone" name="phone" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="quote-location">Project Location</label>
+            <input type="text" id="quote-location" name="location" placeholder="City or ZIP code" required>
+          </div>
+
+          <div class="form-group">
+            <label for="quote-service">Service Type</label>
+            <select id="quote-service" name="service" required>
+              <option value="">Select a service...</option>
+              <option value="machine-control">Machine Control</option>
+              <option value="modeling">3D Modeling & Takeoffs</option>
+              <option value="training">Training & Support</option>
+              <option value="rentals">Equipment Rentals</option>
+              <option value="utility-locating">Utility Locating</option>
+              <option value="multiple">Multiple Services</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="quote-scope">Brief Project Scope</label>
+            <textarea id="quote-scope" name="scope" rows="3" placeholder="Describe your project needs, timeline, equipment requirements..." required></textarea>
+          </div>
+
+          <div class="form-group file-upload">
+            <label for="quote-files">Project Files (optional)</label>
+            <input type="file" id="quote-files" name="files" multiple accept=".pdf,.dwg,.dxf,.kml,.kmz">
+            <div class="file-upload-hint">CAD drawings, site plans, or project specs (PDF, DWG, DXF, KML)</div>
+          </div>
+
+          <button type="submit" class="form-submit">Request Quote</button>
+        </form>
+      </div>
+
+      <!-- Success State -->
+      <div class="form-success" data-success-state style="display: none;">
+        <div class="success-content">
+          <div class="success-confetti"></div>
+          <h3>You're booked!</h3>
+          <p>Expect a calendar invite + SMS confirmation within 15 minutes.</p>
+          <button class="success-close" data-close-success>Schedule Another</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Service Area (Interactive) -->
+    <div class="dirtprep-demo__service-area">
+      <h3 class="service-area__heading">Service Coverage</h3>
+      
+      <!-- ZIP Checker -->
+      <div class="zip-checker">
+        <div class="zip-input-wrapper">
+          <input 
+            type="text" 
+            class="zip-input" 
+            placeholder="Enter city or ZIP to check availability"
+            data-zip-input
+          >
+          <button class="zip-check-btn" data-zip-check>Check</button>
+        </div>
+        <div class="zip-result" data-zip-result></div>
+      </div>
+
+      <!-- Coverage Map/Chips -->
+      <div class="coverage-display">
+        <div class="coverage-chips">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'service_region' %}
+                <button 
+                  class="coverage-chip" 
+                  data-region="{{ block.settings.region_slug }}"
+                  data-pledge="{{ block.settings.response_pledge }}"
+                >
+                  {{ block.settings.region_name }}
+                </button>
+            {% endcase %}
+          {% endfor %}
+        </div>
+        
+        <div class="coverage-map" data-coverage-map style="display: none;">
+          <!-- Map would be loaded here via JavaScript -->
+          <div class="map-placeholder">
+            <p>Interactive map showing CA & NV coverage areas</p>
+            <small>Click a region chip above to see response times</small>
+          </div>
+        </div>
+
+        <div class="response-pledge" data-response-pledge style="display: none;">
+          <div class="pledge-content">
+            <strong class="pledge-region"></strong>
+            <span class="pledge-time"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Not Sure CTA -->
+      <div class="coverage-help">
+        <span>Not sure if we cover your area?</span>
+        <button class="help-cta" data-open-chat>Chat with us</button>
+        <span>or</span>
+        <a href="tel:{{ section.settings.phone_number | default: '8004555165' }}" class="help-cta">call now</a>
+      </div>
+    </div>
+
+    <!-- Local Proof + FAQs -->
+    <div class="dirtprep-demo__proof-section">
+      
+      <!-- Mini Testimonial Row -->
+      {% if section.settings.show_testimonials %}
+        <div class="mini-testimonials">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'testimonial' %}
+                <div class="mini-testimonial">
+                  <p>"{{ block.settings.quote }}"</p>
+                  <cite>{{ block.settings.author }}, {{ block.settings.company }} ({{ block.settings.location }})</cite>
+                </div>
+            {% endcase %}
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <!-- FAQs Accordion -->
+      <div class="faqs-section">
+        <h3>Common Questions</h3>
+        <div class="faqs-accordion">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'faq' %}
+                <div class="faq-item">
+                  <button class="faq-question" data-faq-toggle>
+                    <span>{{ block.settings.question }}</span>
+                    <div class="faq-icon">+</div>
+                  </button>
+                  <div class="faq-answer">
+                    <p>{{ block.settings.answer }}</p>
+                  </div>
+                </div>
+            {% endcase %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Persistent Mobile CTA -->
+{% if section.settings.show_mobile_sticky %}
+  <div class="dirtprep-demo__mobile-sticky" data-mobile-sticky>
+    <a href="tel:{{ section.settings.phone_number | default: '8004555165' }}" class="mobile-sticky-call">
+      Call {{ section.settings.phone_number | default: '(800) 455-5165' }}
+    </a>
+    <span class="mobile-sticky-divider">|</span>
+    <button class="mobile-sticky-schedule" data-mobile-schedule>Schedule</button>
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  :root {
+    --dirtprep-red: #e31e24;
+    --dirtprep-red-dark: #c41e3a;
+    --dirtprep-red-light: #ff4757;
+    --dirtprep-white: #ffffff;
+    --dirtprep-gray-light: #f8f9fa;
+    --dirtprep-gray: #6c757d;
+    --dirtprep-gray-dark: #495057;
+    --dirtprep-dark: #2c3e50;
+    --dirtprep-black: #1a1a1a;
+  }
+
+  .dirtprep-demo {
+    position: relative;
+    padding: 3rem 0;
+    background: linear-gradient(135deg, #fafafa 0%, #f0f2f5 100%);
+    overflow: hidden;
+  }
+
+  /* Blueprint Background */
+  .dirtprep-demo__blueprint {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0.6;
+  }
+
+  .dirtprep-demo__blueprint-lines {
+    width: 100%;
+    height: 100%;
+  }
+
+  .blueprint-tech-line {
+    stroke-dasharray: 8,4;
+    animation: blueprintFlow 12s linear infinite;
+  }
+
+  @keyframes blueprintFlow {
+    0% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: -24; }
+  }
+
+  .dirtprep-demo__container {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* Conversion Hero */
+  .dirtprep-demo__hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    margin-bottom: 4rem;
+  }
+
+  .dirtprep-demo__hero-card {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+
+  .hero-card-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .dirtprep-demo__phone-card {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--dirtprep-white);
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+  }
+
+  .phone-icon {
+    font-size: 1.2rem;
+  }
+
+  .phone-number {
+    font-weight: 700;
+    color: var(--dirtprep-dark);
+    font-size: 0.9rem;
+  }
+
+  .phone-pickup {
+    font-size: 0.75rem;
+    color: var(--dirtprep-gray);
+  }
+
+  .dirtprep-demo__hero-content {
+    padding-left: 1rem;
+  }
+
+  .dirtprep-demo__heading {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin: 0 0 1rem 0;
+    color: var(--dirtprep-dark);
+  }
+
+  .crane-lifted {
+    display: inline-block;
+    animation: craneHook 1s ease-out 0.5s both;
+  }
+
+  @keyframes craneHook {
+    0% {
+      transform: translateY(10px);
+      opacity: 0.8;
+    }
+    70% {
+      transform: translateY(-5px);
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .dirtprep-demo__subheading {
+    font-size: 1.1rem;
+    color: var(--dirtprep-gray-dark);
+    margin: 0 0 2rem 0;
+    line-height: 1.4;
+  }
+
+  /* Action Row */
+  .dirtprep-demo__actions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .demo-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.25rem 1rem;
+    border: 2px solid var(--dirtprep-red);
+    border-radius: 12px;
+    background: var(--dirtprep-white);
+    color: var(--dirtprep-red);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+
+  .demo-cta:hover {
+    background: var(--dirtprep-red);
+    color: var(--dirtprep-white);
+    transform: scale(1.02);
+  }
+
+  .demo-cta--call:hover {
+    background: #2ecc71;
+    border-color: #2ecc71;
+  }
+
+  .cta-icon {
+    font-size: 1.5rem;
+  }
+
+  .cta-text {
+    font-size: 0.9rem;
+  }
+
+  /* Trust Chips */
+  .dirtprep-demo__trust-chips {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .trust-chip {
+    background: rgba(227, 30, 36, 0.1);
+    color: var(--dirtprep-red);
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  /* Form Section */
+  .dirtprep-demo__form-section {
+    background: var(--dirtprep-white);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 4rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(227, 30, 36, 0.1);
+  }
+
+  .form-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid var(--dirtprep-gray-light);
+  }
+
+  .form-tab {
+    flex: 1;
+    padding: 0.75rem 1.5rem;
+    background: var(--dirtprep-gray-light);
+    color: var(--dirtprep-gray-dark);
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .form-tab.active {
+    background: var(--dirtprep-red);
+    color: var(--dirtprep-white);
+  }
+
+  .form-content {
+    display: none;
+  }
+
+  .form-content.active {
+    display: block;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-group label {
+    display: block;
+    font-weight: 600;
+    color: var(--dirtprep-dark);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--dirtprep-gray-light);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--dirtprep-red);
+    box-shadow: 0 0 0 3px rgba(227, 30, 36, 0.1);
+  }
+
+  .form-hint {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--dirtprep-gray);
+    margin-top: 0.25rem;
+  }
+
+  .checkbox-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .checkbox-label input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+  }
+
+  .file-upload-hint {
+    font-size: 0.8rem;
+    color: var(--dirtprep-gray);
+    margin-top: 0.25rem;
+  }
+
+  .form-submit {
+    width: 100%;
+    padding: 1rem 2rem;
+    background: var(--dirtprep-red);
+    color: var(--dirtprep-white);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .form-submit:hover {
+    background: var(--dirtprep-red-dark);
+    transform: translateY(-2px);
+  }
+
+  /* Success State */
+  .form-success {
+    text-align: center;
+    padding: 3rem 2rem;
+  }
+
+  .success-content h3 {
+    color: var(--dirtprep-red);
+    font-size: 1.5rem;
+    margin: 0 0 1rem 0;
+  }
+
+  .success-content p {
+    color: var(--dirtprep-gray-dark);
+    margin: 0 0 2rem 0;
+  }
+
+  .success-close {
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    color: var(--dirtprep-red);
+    border: 2px solid var(--dirtprep-red);
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .success-close:hover {
+    background: var(--dirtprep-red);
+    color: var(--dirtprep-white);
+  }
+
+  /* Success Confetti Animation */
+  .success-confetti {
+    position: relative;
+    height: 50px;
+    margin-bottom: 1rem;
+  }
+
+  .success-confetti::before,
+  .success-confetti::after {
+    content: '🎉';
+    position: absolute;
+    font-size: 2rem;
+    animation: confetti 0.4s ease-out;
+  }
+
+  .success-confetti::before {
+    left: 30%;
+    animation-delay: 0.1s;
+  }
+
+  .success-confetti::after {
+    right: 30%;
+    animation-delay: 0.2s;
+  }
+
+  @keyframes confetti {
+    0% {
+      transform: translateY(0) scale(0);
+      opacity: 0;
+    }
+    50% {
+      transform: translateY(-20px) scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-40px) scale(0.8);
+      opacity: 0;
+    }
+  }
+
+  /* Service Area */
+  .dirtprep-demo__service-area {
+    margin-bottom: 4rem;
+  }
+
+  .service-area__heading {
+    text-align: center;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--dirtprep-dark);
+    margin: 0 0 2rem 0;
+  }
+
+  /* ZIP Checker */
+  .zip-checker {
+    max-width: 500px;
+    margin: 0 auto 2rem;
+  }
+
+  .zip-input-wrapper {
+    display: flex;
+    gap: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid var(--dirtprep-gray-light);
+  }
+
+  .zip-input {
+    flex: 1;
+    padding: 1rem;
+    border: none;
+    font-size: 1rem;
+  }
+
+  .zip-input:focus {
+    outline: none;
+  }
+
+  .zip-check-btn {
+    padding: 1rem 1.5rem;
+    background: var(--dirtprep-red);
+    color: var(--dirtprep-white);
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .zip-check-btn:hover {
+    background: var(--dirtprep-red-dark);
+  }
+
+  .zip-result {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 600;
+    display: none;
+  }
+
+  .zip-result.in-range {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    display: block;
+  }
+
+  .zip-result.call-us {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+    display: block;
+  }
+
+  .zip-result.out-of-range {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    display: block;
+  }
+
+  /* Coverage Display */
+  .coverage-display {
+    text-align: center;
+  }
+
+  .coverage-chips {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  .coverage-chip {
+    padding: 0.75rem 1.25rem;
+    background: var(--dirtprep-white);
+    color: var(--dirtprep-gray-dark);
+    border: 2px solid var(--dirtprep-gray-light);
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .coverage-chip:hover,
+  .coverage-chip.active {
+    background: var(--dirtprep-red);
+    color: var(--dirtprep-white);
+    border-color: var(--dirtprep-red);
+    transform: scale(1.02);
+  }
+
+  .response-pledge {
+    background: var(--dirtprep-white);
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    margin: 0 auto;
+    max-width: 400px;
+  }
+
+  .pledge-region {
+    color: var(--dirtprep-red);
+    font-size: 1.1rem;
+  }
+
+  .pledge-time {
+    color: var(--dirtprep-gray-dark);
+    margin-left: 0.5rem;
+  }
+
+  .coverage-help {
+    text-align: center;
+    margin-top: 2rem;
+    color: var(--dirtprep-gray-dark);
+  }
+
+  .help-cta {
+    color: var(--dirtprep-red);
+    text-decoration: none;
+    font-weight: 600;
+    margin: 0 0.5rem;
+    transition: color 0.3s ease;
+  }
+
+  .help-cta:hover {
+    color: var(--dirtprep-red-dark);
+  }
+
+  /* Proof Section */
+  .dirtprep-demo__proof-section {
+    margin-bottom: 3rem;
+  }
+
+  /* Mini Testimonials */
+  .mini-testimonials {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .mini-testimonial {
+    background: var(--dirtprep-white);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+  }
+
+  .mini-testimonial:hover {
+    transform: translateY(-3px);
+  }
+
+  .mini-testimonial p {
+    font-style: italic;
+    color: var(--dirtprep-dark);
+    margin: 0 0 1rem 0;
+    line-height: 1.4;
+  }
+
+  .mini-testimonial cite {
+    font-size: 0.85rem;
+    color: var(--dirtprep-gray);
+    font-weight: 600;
+  }
+
+  /* FAQs */
+  .faqs-section {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .faqs-section h3 {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--dirtprep-dark);
+    margin: 0 0 2rem 0;
+  }
+
+  .faq-item {
+    background: var(--dirtprep-white);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .faq-question {
+    width: 100%;
+    padding: 1.25rem 1.5rem;
+    background: none;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    color: var(--dirtprep-dark);
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-align: left;
+  }
+
+  .faq-question:hover {
+    background: var(--dirtprep-gray-light);
+  }
+
+  .faq-icon {
+    color: var(--dirtprep-red);
+    font-weight: 700;
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+  }
+
+  .faq-item.active .faq-icon {
+    transform: rotate(45deg);
+  }
+
+  .faq-answer {
+    padding: 0 1.5rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .faq-item.active .faq-answer {
+    max-height: 200px;
+    padding: 0 1.5rem 1.5rem;
+  }
+
+  .faq-answer p {
+    color: var(--dirtprep-gray-dark);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* Mobile Sticky CTA */
+  .dirtprep-demo__mobile-sticky {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--dirtprep-red);
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    box-shadow: 0 4px 20px rgba(227, 30, 36, 0.4);
+    display: none;
+    align-items: center;
+    gap: 1rem;
+    z-index: 1000;
+    animation: slideUp 0.3s ease;
+  }
+
+  .mobile-sticky-call,
+  .mobile-sticky-schedule {
+    color: var(--dirtprep-white);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .mobile-sticky-divider {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  /* Responsive Design */
+  @media screen and (max-width: 768px) {
+    .dirtprep-demo {
+      padding: 2rem 0;
+    }
+
+    .dirtprep-demo__container {
+      padding: 0 1rem;
+    }
+
+    .dirtprep-demo__hero {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .dirtprep-demo__hero-content {
+      padding-left: 0;
+      text-align: center;
+    }
+
+    .dirtprep-demo__actions {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .demo-cta {
+      flex-direction: row;
+      justify-content: center;
+      padding: 1rem 1.5rem;
+    }
+
+    .dirtprep-demo__trust-chips {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .coverage-chips {
+      overflow-x: auto;
+      justify-content: flex-start;
+      padding-bottom: 0.5rem;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .coverage-chips::-webkit-scrollbar {
+      display: none;
+    }
+
+    .coverage-chip {
+      flex-shrink: 0;
+    }
+
+    .mini-testimonials {
+      grid-template-columns: 1fr;
+    }
+
+    .dirtprep-demo__mobile-sticky {
+      display: flex;
+    }
+  }
+
+  /* Accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .crane-lifted,
+    .demo-cta,
+    .coverage-chip,
+    .mini-testimonial,
+    .blueprint-tech-line {
+      animation: none;
+      transition: none;
+    }
+
+    .demo-cta:hover,
+    .coverage-chip:hover,
+    .mini-testimonial:hover {
+      transform: none;
+    }
+  }
+
+  @media (prefers-contrast: high) {
+    .demo-cta,
+    .form-tab,
+    .coverage-chip,
+    .faq-item {
+      border-width: 3px;
+    }
+  }
+
+  /* Performance optimizations */
+  .hero-card-image {
+    will-change: transform;
+  }
+
+  .faq-answer {
+    will-change: max-height, padding;
+  }
+
+{% endstylesheet %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize demo scheduler functionality
+  const demoSection = document.querySelector('[data-section-type="demo-scheduler"]');
+  if (!demoSection) return;
+
+  // Cache DOM elements
+  const formTabs = demoSection.querySelectorAll('.form-tab');
+  const formContents = demoSection.querySelectorAll('.form-content');
+  const ctaButtons = demoSection.querySelectorAll('[data-track-cta]');
+  const scheduleForm = demoSection.querySelector('[data-schedule-form]');
+  const quoteForm = demoSection.querySelector('[data-quote-form]');
+  const successState = demoSection.querySelector('[data-success-state]');
+  const zipInput = demoSection.querySelector('[data-zip-input]');
+  const zipCheckBtn = demoSection.querySelector('[data-zip-check]');
+  const zipResult = demoSection.querySelector('[data-zip-result]');
+  const coverageChips = demoSection.querySelectorAll('[data-region]');
+  const responsePledge = demoSection.querySelector('[data-response-pledge]');
+  const faqItems = demoSection.querySelectorAll('.faq-item');
+  const mobileSticky = demoSection.querySelector('[data-mobile-sticky]');
+  const heroCard = demoSection.querySelector('[data-parallax-card]');
+
+  // Tab switching functionality
+  formTabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      const targetTab = this.dataset.tab;
+      
+      // Update active tab
+      formTabs.forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      
+      // Update active content
+      formContents.forEach(content => {
+        content.classList.remove('active');
+        if (content.dataset.tabContent === targetTab) {
+          content.classList.add('active');
+        }
+      });
+
+      // Track tab selection
+      trackEvent('tab_switch', { tab: targetTab });
+    });
+  });
+
+  // CTA button tracking and functionality
+  ctaButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const ctaType = this.dataset.trackCta;
+      
+      if (ctaType === 'call') {
+        window.location.href = 'tel:8004555165';
+      } else if (ctaType === 'schedule') {
+        switchToTab('schedule');
+      } else if (ctaType === 'quote') {
+        switchToTab('quote');
+      }
+
+      // Track CTA click
+      trackEvent('cta_click', { 
+        type: ctaType, 
+        position: 'hero',
+        region: getCurrentRegion()
+      });
+    });
+  });
+
+  // Tab opening from CTA buttons
+  demoSection.addEventListener('click', function(e) {
+    if (e.target.dataset.openTab) {
+      switchToTab(e.target.dataset.openTab);
+    }
+  });
+
+  function switchToTab(tabName) {
+    const tab = demoSection.querySelector(`[data-tab="${tabName}"]`);
+    if (tab) {
+      tab.click();
+      // Smooth scroll to form
+      demoSection.querySelector('[data-form-tabs]').scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  }
+
+  // Form submission handlers
+  if (scheduleForm) {
+    scheduleForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      handleFormSubmission(this, 'schedule');
+    });
+  }
+
+  if (quoteForm) {
+    quoteForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      handleFormSubmission(this, 'quote');
+    });
+  }
+
+  function handleFormSubmission(form, type) {
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    
+    // Track form submission
+    trackEvent('form_submit', { 
+      type: type,
+      location: data.location || '',
+      funnel_step: 'submit'
+    });
+
+    // Simulate API call
+    setTimeout(() => {
+      showSuccessState();
+      trackEvent('form_success', { type: type });
+    }, 1000);
+  }
+
+  function showSuccessState() {
+    formContents.forEach(content => content.style.display = 'none');
+    successState.style.display = 'block';
+    
+    // Trigger confetti animation
+    const confetti = successState.querySelector('.success-confetti');
+    confetti.style.animation = 'none';
+    confetti.offsetHeight; // Trigger reflow
+    confetti.style.animation = null;
+  }
+
+  // Success state close handler
+  const successClose = demoSection.querySelector('[data-close-success]');
+  if (successClose) {
+    successClose.addEventListener('click', function() {
+      successState.style.display = 'none';
+      formContents.forEach(content => {
+        if (content.classList.contains('active')) {
+          content.style.display = 'block';
+        }
+      });
+    });
+  }
+
+  // ZIP checker functionality
+  if (zipCheckBtn && zipInput) {
+    zipCheckBtn.addEventListener('click', checkZip);
+    zipInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        checkZip();
+      }
+    });
+  }
+
+  function checkZip() {
+    const zip = zipInput.value.trim();
+    if (!zip) return;
+
+    // Track ZIP check
+    trackEvent('zip_check', { zip: zip });
+
+    // Simulate ZIP validation (in production, this would be an API call)
+    const result = validateZip(zip);
+    showZipResult(result, zip);
+  }
+
+  function validateZip(zip) {
+    // Simple validation logic - in production, use actual service area data
+    const caZips = ['90', '91', '92', '93', '94', '95', '96'];
+    const nvZips = ['89'];
+    
+    const zipPrefix = zip.substring(0, 2);
+    
+    if (caZips.includes(zipPrefix) || nvZips.includes(zipPrefix)) {
+      return 'in-range';
+    } else if (['88', '87', '86', '85', '84', '83'].includes(zipPrefix)) {
+      return 'call-us';
+    } else {
+      return 'out-of-range';
+    }
+  }
+
+  function showZipResult(result, zip) {
+    const messages = {
+      'in-range': `✅ We cover ${zip}! Same-day or next-day service available.`,
+      'call-us': `⚠️ ${zip} is on our coverage edge. Call us to confirm availability.`,
+      'out-of-range': `❌ ${zip} is outside our current service area. Try CA or NV locations.`
+    };
+
+    zipResult.className = `zip-result ${result}`;
+    zipResult.textContent = messages[result];
+    zipResult.style.display = 'block';
+
+    // Track result
+    trackEvent('zip_result', { zip: zip, result: result });
+  }
+
+  // Coverage chip functionality
+  coverageChips.forEach(chip => {
+    chip.addEventListener('click', function() {
+      const region = this.dataset.region;
+      const pledge = this.dataset.pledge;
+      
+      // Update active state
+      coverageChips.forEach(c => c.classList.remove('active'));
+      this.classList.add('active');
+      
+      // Show response pledge
+      if (responsePledge) {
+        const regionEl = responsePledge.querySelector('.pledge-region');
+        const timeEl = responsePledge.querySelector('.pledge-time');
+        
+        if (regionEl) regionEl.textContent = this.textContent + ':';
+        if (timeEl) timeEl.textContent = pledge;
+        
+        responsePledge.style.display = 'block';
+      }
+
+      // Track region selection
+      trackEvent('region_click', { region: region, pledge: pledge });
+    });
+  });
+
+  // FAQ accordion functionality
+  faqItems.forEach(item => {
+    const question = item.querySelector('.faq-question');
+    if (question) {
+      question.addEventListener('click', function() {
+        const isActive = item.classList.contains('active');
+        
+        // Close all other FAQs
+        faqItems.forEach(faq => faq.classList.remove('active'));
+        
+        // Toggle current FAQ
+        if (!isActive) {
+          item.classList.add('active');
+        }
+
+        // Track FAQ interaction
+        trackEvent('faq_click', { 
+          question: question.textContent.trim(),
+          opened: !isActive
+        });
+      });
+    }
+  });
+
+  // Parallax effect for hero card
+  function handleParallax() {
+    if (!heroCard || window.innerWidth <= 768) return;
+    
+    const rect = heroCard.getBoundingClientRect();
+    const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+    
+    if (isVisible) {
+      const scrolled = window.pageYOffset;
+      const rate = scrolled * -0.3;
+      heroCard.style.transform = `translateY(${rate * 0.1}px)`;
+    }
+  }
+
+  window.addEventListener('scroll', handleParallax);
+  handleParallax(); // Initial call
+
+  // Mobile sticky CTA functionality
+  if (mobileSticky && window.innerWidth <= 768) {
+    const stickyObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          mobileSticky.style.display = 'flex';
+        } else {
+          mobileSticky.style.display = 'none';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    stickyObserver.observe(demoSection);
+
+    // Mobile sticky button handlers
+    const mobileScheduleBtn = mobileSticky.querySelector('[data-mobile-schedule]');
+    if (mobileScheduleBtn) {
+      mobileScheduleBtn.addEventListener('click', function() {
+        switchToTab('schedule');
+        trackEvent('cta_click', { type: 'schedule', position: 'mobile_sticky' });
+      });
+    }
+  }
+
+  // Utility functions
+  function getCurrentRegion() {
+    const activeChip = demoSection.querySelector('[data-region].active');
+    return activeChip ? activeChip.dataset.region : 'unknown';
+  }
+
+  function trackEvent(eventName, properties = {}) {
+    // Track analytics events
+    console.log('Analytics Event:', eventName, properties);
+    
+    // In production, integrate with your analytics platform:
+    // gtag('event', eventName, properties);
+    // analytics.track(eventName, properties);
+  }
+
+  // Track time to first meaningful action
+  let firstActionTracked = false;
+  const startTime = Date.now();
+  
+  demoSection.addEventListener('click', function() {
+    if (!firstActionTracked) {
+      const timeToAction = Date.now() - startTime;
+      trackEvent('time_to_first_action', { time_ms: timeToAction });
+      firstActionTracked = true;
+    }
+  });
+
+  // Initialize date/time picker with current timezone
+  const datetimeInput = demoSection.querySelector('#schedule-datetime');
+  if (datetimeInput) {
+    // Set minimum date to today
+    const now = new Date();
+    const localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+    datetimeInput.min = localDateTime.toISOString().slice(0, 16);
+  }
+});
+</script>
+
+{% schema %}
+{
+  "name": "DirtPrep Demo Scheduler",
+  "tag": "section",
+  "class": "dirtprep-demo-wrapper section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Conversion Hero"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Main Heading",
+      "default": "Book a 30-min demo—on site or video."
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Same-day in Orange County if booked before 2pm. CA & NV coverage."
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero Image",
+      "info": "Technology demonstration image (recommended: 600x400px)"
+    },
+    {
+      "type": "text",
+      "id": "hero_image_alt",
+      "label": "Hero Image Alt Text",
+      "default": "DirtPrep technology demonstration"
+    },
+    {
+      "type": "header",
+      "content": "Call-to-Action Buttons"
+    },
+    {
+      "type": "text",
+      "id": "phone_number",
+      "label": "Phone Number",
+      "default": "(800) 455-5165",
+      "info": "Display format for phone number"
+    },
+    {
+      "type": "text",
+      "id": "call_text",
+      "label": "Call Button Text",
+      "default": "Call now"
+    },
+    {
+      "type": "text",
+      "id": "schedule_text",
+      "label": "Schedule Button Text",
+      "default": "Pick a time"
+    },
+    {
+      "type": "text",
+      "id": "quote_text",
+      "label": "Quote Button Text",
+      "default": "Get a price"
+    },
+    {
+      "type": "header",
+      "content": "Trust Elements"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust_chips",
+      "label": "Show Trust Chips",
+      "default": true,
+      "info": "Display licensed, rating, and partnership badges"
+    },
+    {
+      "type": "header",
+      "content": "Social Proof"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_testimonials",
+      "label": "Show Mini Testimonials",
+      "default": true,
+      "info": "Display location-tagged testimonials"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Experience"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_mobile_sticky",
+      "label": "Show Mobile Sticky CTA",
+      "default": true,
+      "info": "Display persistent call/schedule buttons on mobile"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "service_region",
+      "name": "Service Region",
+      "settings": [
+        {
+          "type": "text",
+          "id": "region_name",
+          "label": "Region Name",
+          "default": "Orange County"
+        },
+        {
+          "type": "text",
+          "id": "region_slug",
+          "label": "Region Slug",
+          "default": "oc",
+          "info": "Used for tracking and URL parameters"
+        },
+        {
+          "type": "text",
+          "id": "response_pledge",
+          "label": "Response Time Pledge",
+          "default": "Same-day service available",
+          "info": "Shown when region is selected"
+        }
+      ]
+    },
+    {
+      "type": "testimonial",
+      "name": "Location Testimonial",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "Setup was seamless and training was excellent."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author Name",
+          "default": "Mike Johnson"
+        },
+        {
+          "type": "text",
+          "id": "company",
+          "label": "Company",
+          "default": "Pacific Grading"
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "label": "Location",
+          "default": "Orange County",
+          "info": "City or region for location tagging"
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "FAQ",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Do you travel outside CA/NV?"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "Answer",
+          "default": "Currently we focus on California and Nevada to ensure fast response times and quality service. Contact us if you have a project outside our coverage area."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "DirtPrep Demo Scheduler",
+      "category": "Custom",
+      "settings": {
+        "heading": "Book a 30-min demo—on site or video.",
+        "subheading": "Same-day in Orange County if booked before 2pm. CA & NV coverage.",
+        "phone_number": "(800) 455-5165",
+        "call_text": "Call now",
+        "schedule_text": "Pick a time", 
+        "quote_text": "Get a price",
+        "show_trust_chips": true,
+        "show_testimonials": true,
+        "show_mobile_sticky": true
+      },
+      "blocks": [
+        {
+          "type": "service_region",
+          "settings": {
+            "region_name": "Orange County",
+            "region_slug": "oc",
+            "response_pledge": "Same-day service available"
+          }
+        },
+        {
+          "type": "service_region",
+          "settings": {
+            "region_name": "Los Angeles",
+            "region_slug": "la", 
+            "response_pledge": "24-48h response time"
+          }
+        },
+        {
+          "type": "service_region",
+          "settings": {
+            "region_name": "Riverside",
+            "region_slug": "riverside",
+            "response_pledge": "24-48h response time"
+          }
+        },
+        {
+          "type": "service_region",
+          "settings": {
+            "region_name": "San Bernardino",
+            "region_slug": "san-bernardino",
+            "response_pledge": "24-48h response time"
+          }
+        },
+        {
+          "type": "service_region",
+          "settings": {
+            "region_name": "San Diego",
+            "region_slug": "san-diego",
+            "response_pledge": "48-72h response time"
+          }
+        },
+        {
+          "type": "service_region", 
+          "settings": {
+            "region_name": "Clark County (NV)",
+            "region_slug": "clark-county",
+            "response_pledge": "24-48h response time"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Setup was seamless and training was excellent.",
+            "author": "Mike Johnson",
+            "company": "Pacific Grading",
+            "location": "Orange County"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Best investment we've made for accuracy.",
+            "author": "Sarah Davis", 
+            "company": "Golden State Excavation",
+            "location": "Los Angeles"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Professional team, reliable support.",
+            "author": "Tom Rodriguez",
+            "company": "Desert Construction",
+            "location": "Las Vegas"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Do you travel outside CA/NV?",
+            "answer": "Currently we focus on California and Nevada to ensure fast response times and quality service. Contact us if you have a project outside our coverage area."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "What are your on-site rates & travel costs?",
+            "answer": "On-site demos are complimentary within our primary service areas. Travel charges may apply for remote locations. We'll discuss all costs upfront during scheduling."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "What do you bring to a demo?",
+            "answer": "We bring a complete machine control system for hands-on demonstration, including GPS base station, rover, and tablet. No equipment needed on your end."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "What if weather's bad on demo day?",
+            "answer": "We can reschedule for better conditions or conduct an indoor presentation with video demonstrations and Q&A. Your choice!"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
