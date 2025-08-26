@@ -6,7 +6,8 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "hero_jVaWmY": {
       "type": "hero",
@@ -57,10 +58,12 @@
         "text_YLPk4p",
         "button_H9gpTf"
       ],
+      "disabled": true,
       "name": "t:names.hero",
       "settings": {
         "media_type_1": "image",
         "media_type_2": "image",
+        "link": "",
         "open_in_new_tab": false,
         "content_direction": "column",
         "vertical_on_mobile": true,
@@ -84,203 +87,121 @@
         "padding-block-end": 72
       }
     },
-    "product_list_fa6P9H": {
-      "type": "product-list",
+    "dirtprep_hero_WXiMrr": {
+      "type": "dirtprep-hero",
+      "name": "DirtPrep Hero",
+      "settings": {
+        "background_image": "shopify://shop_images/ed9277_9002b56154364784a2a1d4a21cc2612cmv2.webp",
+        "show_overlay": true,
+        "overlay_opacity": 40,
+        "logo_width": 200,
+        "heading": "Your Construction Technology Resource",
+        "subheading": "Professional Equipment & Expert Solutions",
+        "content_max_width": 600,
+        "button_1_text": "Book Appointment",
+        "button_1_link": "",
+        "button_1_new_tab": false,
+        "button_2_text": "Contact Us",
+        "button_2_link": "",
+        "button_2_new_tab": false,
+        "show_trust_bar": true,
+        "trust_text": "Official Leica Geosystems Distributor & Technology Partner",
+        "leica_logo": "shopify://shop_images/logo.webp",
+        "agtek_logo": "shopify://shop_images/logo.webp",
+        "section_height": 80,
+        "color_scheme": ""
+      }
+    },
+    "dirtprep_about_us_NpQKVR": {
+      "type": "dirtprep-about-us",
       "blocks": {
-        "static-header": {
-          "type": "_product-list-content",
-          "name": "t:names.header",
-          "static": true,
+        "partner_logo_RfWxJz": {
+          "type": "partner_logo",
           "settings": {
-            "content_direction": "row",
-            "vertical_on_mobile": false,
-            "horizontal_alignment": "space-between",
-            "vertical_alignment": "flex-end",
-            "align_baseline": true,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_list_text_YFtzcL": {
-              "type": "_product-list-text",
-              "name": "t:names.collection_title",
-              "settings": {
-                "text": "<h3>{{ closest.collection.title }}</h3>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "h4",
-                "font": "var(--font-body--family)",
-                "font_size": "",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_list_button_MWeP9V": {
-              "type": "_product-list-button",
-              "name": "t:names.product_list_button",
-              "settings": {
-                "label": "View all",
-                "open_in_new_tab": false,
-                "style_class": "link",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_list_text_YFtzcL",
-            "product_list_button_MWeP9V"
-          ]
+            "alt_text": "Leica Geosystems"
+          }
         },
-        "static-product-card": {
-          "type": "_product-card",
-          "name": "t:names.product_card",
-          "static": true,
+        "partner_logo_Gnit8K": {
+          "type": "partner_logo",
           "settings": {
-            "product_card_gap": 4,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_card_gallery_677WP3": {
-              "type": "_product-card-gallery",
-              "name": "t:names.product_card_media",
-              "settings": {
-                "image_ratio": "adapt",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_title_YXxMTj": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "price_JQzVV4": {
-              "type": "price",
-              "name": "t:names.product_price",
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "h6",
-                "width": "100%",
-                "alignment": "left",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "color": "var(--color-foreground)",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_card_gallery_677WP3",
-            "product_title_YXxMTj",
-            "price_JQzVV4"
-          ]
+            "alt_text": "AGTEK"
+          }
+        },
+        "testimonial_DAahAw": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "DirtPrep transformed our operation. Setup was seamless and the training was excellent.",
+            "author": "Mike Johnson",
+            "company": "Pacific Grading"
+          }
+        },
+        "testimonial_zbCUEq": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Best investment we've made. Our accuracy improved dramatically.",
+            "author": "Sarah Davis",
+            "company": "Golden State Excavation"
+          }
+        },
+        "testimonial_hPKbq9": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Professional team, reliable support. Highly recommended.",
+            "author": "Tom Rodriguez",
+            "company": "SoCal Infrastructure"
+          }
         }
       },
-      "name": "Featured collection",
+      "block_order": [
+        "partner_logo_RfWxJz",
+        "partner_logo_Gnit8K",
+        "testimonial_DAahAw",
+        "testimonial_zbCUEq",
+        "testimonial_hPKbq9"
+      ],
+      "name": "DirtPrep About Us",
       "settings": {
-        "collection": "all",
-        "layout_type": "grid",
-        "carousel_on_mobile": false,
-        "max_products": 8,
-        "columns": 4,
-        "mobile_columns": "2",
-        "mobile_card_size": "60cqw",
-        "columns_gap": 8,
-        "rows_gap": 24,
-        "icons_style": "arrow",
-        "icons_shape": "none",
-        "section_width": "page-width",
-        "horizontal_alignment": "flex-start",
-        "gap": 28,
-        "color_scheme": "scheme-1",
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "main_image": "shopify://shop_images/ed9277_9002b56154364784a2a1d4a21cc2612cmv2.webp",
+        "heading": "We help crews adopt construction tech—fast",
+        "subheading": "Training, setup, and support for heavy civil & earthmoving",
+        "description": "<p>DirtPrep Solutions is a one-stop-shop for construction technology, focusing on the heavy civil and earthmoving industries. We specialize in all aspects of technology applicable to earthmoving and helping customers that have limited experience with technology be successful with their investment. We have the ability to provide best-in-class services, training, and support.</p>",
+        "show_hotspots": true,
+        "show_role_toggle": true,
+        "show_micro_grid": true,
+        "why_text": "Technology adoption shouldn't slow down your project timeline.",
+        "why_link": "",
+        "what_text": "Complete setup, training, and ongoing support for construction tech.",
+        "what_link": "",
+        "how_text": "On-site training, 24/7 support, and equipment maintenance.",
+        "how_link": "",
+        "primary_button_text": "Request a Demo",
+        "primary_button_link": "",
+        "secondary_button_text": "See How We Train Crews",
+        "secondary_button_link": "",
+        "tertiary_button_text": "Meet us on site",
+        "tertiary_button_link": "",
+        "show_social_proof": true,
+        "social_proof_text": "Trusted by 120+ SoCal crews • Avg. 4.9/5 service rating",
+        "show_kpi_snapshots": true,
+        "kpi_projects": 120,
+        "kpi_rampup": 3,
+        "kpi_satisfaction": "4.9",
+        "show_partner_badges": true,
+        "show_testimonial_marquee": false,
+        "show_service_map": false,
+        "show_compliance_chip": false,
+        "compliance_text": "Full certifications, safety training programs",
+        "show_video_cameo": false,
+        "video_url": "",
+        "show_timeline": false,
+        "show_mobile_sticky": true,
+        "color_scheme": ""
       }
     }
   },
   "order": [
     "hero_jVaWmY",
-    "product_list_fa6P9H"
+    "dirtprep_hero_WXiMrr",
+    "dirtprep_about_us_NpQKVR"
   ]
 }
